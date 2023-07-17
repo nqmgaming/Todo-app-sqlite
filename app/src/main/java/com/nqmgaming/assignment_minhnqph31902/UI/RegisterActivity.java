@@ -20,6 +20,8 @@ import com.nqmgaming.assignment_minhnqph31902.DTO.UserDTO;
 import com.nqmgaming.assignment_minhnqph31902.R;
 
 public class RegisterActivity extends AppCompatActivity {
+
+    //declare variables
     ImageView imgLogoRegister;
     LinearLayout btnGoogleRegister, btnFacebookRegister, btnAppleRegister;
     EditText edtFirstNameRegister, edtLastNameRegister, edtEmailRegister, edtPasswordRegister, edtConfirmPasswordRegister, edtUsernameRegister;
@@ -32,6 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        //mapping variables with view
         imgLogoRegister = findViewById(R.id.imgLogoAppRegister);
 
         btnGoogleRegister = findViewById(R.id.btnGoogleRegister);
@@ -51,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         imgBackRegister = findViewById(R.id.btnBackRegister);
 
+        //load image from drawable
         Glide.with(this)
                 .load(R.drawable.minh)
                 .transition(DrawableTransitionOptions.withCrossFade(500))
@@ -58,15 +62,21 @@ public class RegisterActivity extends AppCompatActivity {
                 .into(imgLogoRegister);
 
         imgBackRegister.setOnClickListener(v -> {
+
             finish();
+
         });
 
         txtLoginRegister.setOnClickListener(v -> {
+
             startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
             finish();
+
         });
 
         btnRegisterRegister.setOnClickListener(v -> {
+
+            //get data from edit text
             String firstName = edtFirstNameRegister.getText().toString().trim();
             String lastName = edtLastNameRegister.getText().toString().trim();
             String username = edtUsernameRegister.getText().toString().trim();
@@ -76,11 +86,13 @@ public class RegisterActivity extends AppCompatActivity {
 
             try {
 
+                //check if first name is empty
                 if (firstName.isEmpty()) {
                     edtFirstNameRegister.setError("First name is required!");
                     edtFirstNameRegister.requestFocus();
                     return;
                 }
+
                 //check if first name is valid
                 if (!firstName.matches("[a-zA-Z0-9._-]{3,}")) {
                     edtFirstNameRegister.setError("First name is not valid!");
@@ -88,6 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
+                //check if last name is empty
                 if (lastName.isEmpty()) {
                     edtLastNameRegister.setError("Last name is required!");
                     edtLastNameRegister.requestFocus();
@@ -100,11 +113,14 @@ public class RegisterActivity extends AppCompatActivity {
                     edtLastNameRegister.requestFocus();
                     return;
                 }
+
+                //check if username is empty
                 if (username.isEmpty()) {
                     edtUsernameRegister.setError("Username is required!");
                     edtUsernameRegister.requestFocus();
                     return;
                 }
+
                 //check if username is already exist
                 UserDAO userDAO = new UserDAO(this);
                 if (userDAO.checkUserExist(username)) {
@@ -112,23 +128,28 @@ public class RegisterActivity extends AppCompatActivity {
                     edtUsernameRegister.requestFocus();
                     return;
                 }
+
                 //check if username is valid
                 if (!username.matches("[a-zA-Z0-9._-]{3,}")) {
                     edtUsernameRegister.setError("Username is not valid!");
                     edtUsernameRegister.requestFocus();
                     return;
                 }
+
+                //check if email is empty
                 if (email.isEmpty()) {
                     edtEmailRegister.setError("Email is required!");
                     edtEmailRegister.requestFocus();
                     return;
                 }
+
                 //check if email is valid
                 if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     edtEmailRegister.setError("Email is not valid!");
                     edtEmailRegister.requestFocus();
                     return;
                 }
+
                 //check if email is already exist
                 if (userDAO.checkEmailExist(email)) {
                     edtEmailRegister.setError("Email already exists!");
@@ -136,11 +157,14 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
+                //check if password is empty
                 if (password.isEmpty()) {
                     edtPasswordRegister.setError("Password is required!");
                     edtPasswordRegister.requestFocus();
                     return;
                 }
+
+                //check if confirm password is empty
                 if (confirmPassword.isEmpty()) {
                     edtConfirmPasswordRegister.setError("Confirm password is required!");
                     edtConfirmPasswordRegister.requestFocus();
@@ -168,16 +192,27 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             //if all data is valid, create new user
+
+            //create new user
             UserDTO user = new UserDTO(username, email, password, firstName, lastName);
+
+            //insert new user to database
             UserDAO userDAO = new UserDAO(this);
             long result = userDAO.insertUser(user);
+
+            //check if insert success
             if (result > 0) {
+
                 Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+
                 finish();
             } else {
+
+                //if insert failed, show error message
                 edtUsernameRegister.setError("Register failed!");
                 edtUsernameRegister.requestFocus();
+
             }
         });
 
