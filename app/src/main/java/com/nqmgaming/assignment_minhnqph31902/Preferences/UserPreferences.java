@@ -23,4 +23,9 @@ public class UserPreferences {
                 .apply();
     }
 
+    public void logout() {
+        sharedPreferences.edit()
+                .clear()
+                .apply();
+    }
 }

@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.nqmgaming.assignment_minhnqph31902.Adapter.SlideAdapter;
+import com.nqmgaming.assignment_minhnqph31902.SlideAdapter;
 import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
 
