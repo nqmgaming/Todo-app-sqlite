@@ -191,7 +191,7 @@
             android:id="@+id/edtEmailLogin"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/enter_your_email"
+            android:hint="Email"
             android:imeOptions="actionNext"
             android:inputType="textEmailAddress" />
 
@@ -214,7 +214,7 @@
             android:id="@+id/edtPasswordLogin"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/enter_your_password"
+            android:hint="Password"
             android:imeOptions="actionDone"
             android:inputType="textPassword" />
 
@@ -242,6 +242,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:padding="5dp"
             android:id="@+id/txtForgotPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

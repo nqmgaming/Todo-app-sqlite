@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView txtForgotPassword, txtRegister;
     ImageView imgLogo;
     ImageButton btnBack;
+    CheckBox cbRemember;
 
     private UserPreferences userPreferences;
 
@@ -58,6 +60,8 @@ public class LoginActivity extends AppCompatActivity {
         imgLogo = findViewById(R.id.imgLogoApp);
 
         btnBack = findViewById(R.id.btnBack);
+
+        cbRemember = findViewById(R.id.cbRememberMe);
 
         Glide.with(this)
                 .load(R.drawable.minh)
@@ -119,7 +123,9 @@ public class LoginActivity extends AppCompatActivity {
                     edtPassword.requestFocus();
                     return;
                 }
-                userPreferences.setLogin(true);
+                if (cbRemember.isChecked()) {
+                    userPreferences.setLogin(true);
+                }
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
 

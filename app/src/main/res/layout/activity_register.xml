@@ -252,7 +252,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:autofillHints="emailAddress"
-                android:hint="@string/enter_your_username"
+                android:hint="Username"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress" />
 
@@ -275,7 +275,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:autofillHints="emailAddress"
-                android:hint="@string/enter_your_email"
+                android:hint="Email"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress" />
 
@@ -299,7 +299,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:autofillHints="password"
-                android:hint="@string/enter_your_password"
+                android:hint="Password"
                 android:imeOptions="actionNext"
                 android:inputType="textPassword" />
 
@@ -323,7 +323,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:autofillHints="password"
-                android:hint="@string/enter_your_password"
+                android:hint="Password Confirm"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword" />
 
