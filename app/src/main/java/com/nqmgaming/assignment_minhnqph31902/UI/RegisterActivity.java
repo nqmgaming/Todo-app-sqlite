@@ -75,14 +75,28 @@ public class RegisterActivity extends AppCompatActivity {
             String confirmPassword = edtConfirmPasswordRegister.getText().toString().trim();
 
             try {
-                // Kiểm tra các trường dữ liệu có được nhập đầy đủ hay không
+
                 if (firstName.isEmpty()) {
                     edtFirstNameRegister.setError("First name is required!");
                     edtFirstNameRegister.requestFocus();
                     return;
                 }
+                //check if first name is valid
+                if (!firstName.matches("[a-zA-Z0-9._-]{3,}")) {
+                    edtFirstNameRegister.setError("First name is not valid!");
+                    edtFirstNameRegister.requestFocus();
+                    return;
+                }
+
                 if (lastName.isEmpty()) {
                     edtLastNameRegister.setError("Last name is required!");
+                    edtLastNameRegister.requestFocus();
+                    return;
+                }
+
+                //check if last name is valid
+                if (!lastName.matches("[a-zA-Z0-9._-]{3,}")) {
+                    edtLastNameRegister.setError("Last name is not valid!");
                     edtLastNameRegister.requestFocus();
                     return;
                 }
@@ -98,8 +112,20 @@ public class RegisterActivity extends AppCompatActivity {
                     edtUsernameRegister.requestFocus();
                     return;
                 }
+                //check if username is valid
+                if (!username.matches("[a-zA-Z0-9._-]{3,}")) {
+                    edtUsernameRegister.setError("Username is not valid!");
+                    edtUsernameRegister.requestFocus();
+                    return;
+                }
                 if (email.isEmpty()) {
                     edtEmailRegister.setError("Email is required!");
+                    edtEmailRegister.requestFocus();
+                    return;
+                }
+                //check if email is valid
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    edtEmailRegister.setError("Email is not valid!");
                     edtEmailRegister.requestFocus();
                     return;
                 }
@@ -135,33 +161,6 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                //check if email is valid
-                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    edtEmailRegister.setError("Email is not valid!");
-                    edtEmailRegister.requestFocus();
-                    return;
-                }
-
-                //check if username is valid
-                if (!username.matches("[a-zA-Z0-9._-]{3,}")) {
-                    edtUsernameRegister.setError("Username is not valid!");
-                    edtUsernameRegister.requestFocus();
-                    return;
-                }
-
-                //check if first name is valid
-                if (!firstName.matches("[a-zA-Z0-9._-]{3,}")) {
-                    edtFirstNameRegister.setError("First name is not valid!");
-                    edtFirstNameRegister.requestFocus();
-                    return;
-                }
-
-                //check if last name is valid
-                if (!lastName.matches("[a-zA-Z0-9._-]{3,}")) {
-                    edtLastNameRegister.setError("Last name is not valid!");
-                    edtLastNameRegister.requestFocus();
-                    return;
-                }
 
             } catch (Exception e) {
 

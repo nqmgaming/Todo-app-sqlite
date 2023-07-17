@@ -46,4 +46,6 @@ dependencies {
     implementation 'me.relex:circleindicator:2.1.6'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.8.20'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20'
+    def lottieVersion = "3.4.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 }
