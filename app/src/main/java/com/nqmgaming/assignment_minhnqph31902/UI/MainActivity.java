@@ -24,8 +24,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         userPreferences = new UserPreferences(this);
+
         btnLogout = findViewById(R.id.btnLogout);
+
+        //set event click for buttons
         btnLogout.setOnClickListener(v -> {
             userPreferences.logout();
             Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);

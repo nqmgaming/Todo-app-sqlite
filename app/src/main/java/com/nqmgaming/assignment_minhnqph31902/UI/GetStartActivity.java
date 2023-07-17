@@ -11,33 +11,53 @@ import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
 
 public class GetStartActivity extends AppCompatActivity {
+
+    //declare variables
     Button btnLogin, btnRegister;
     CheckBox cbAgree;
     private UserPreferences userPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //check login state
         userPreferences = new UserPreferences(this);
+
+        //if login, go to MainActivity
         if (userPreferences.isLogin()) {
+
             startActivity(new Intent(GetStartActivity.this, MainActivity.class));
             finish();
             return;
+
         }
         setContentView(R.layout.activity_get_start);
+
+        //mapping variables with view
         btnLogin = findViewById(R.id.btnLoginGetStart);
         btnRegister = findViewById(R.id.btnSignUpGetStart);
+
         cbAgree = findViewById(R.id.checkBoxAgree);
 
+
+        //set event click for buttons
         btnLogin.setOnClickListener(v -> {
+
             cbAgree.setChecked(true);
             Intent intent = new Intent(GetStartActivity.this, LoginActivity.class);
             startActivity(intent);
+
         });
 
+        //set event click for buttons
         btnRegister.setOnClickListener(v -> {
+
+            //set checkbox agree to true
             cbAgree.setChecked(true);
             Intent intent = new Intent(GetStartActivity.this, RegisterActivity.class);
             startActivity(intent);
+
         });
 
     }

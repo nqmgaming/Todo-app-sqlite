@@ -1,6 +1,8 @@
 package com.nqmgaming.assignment_minhnqph31902.DTO;
 
 public class UserDTO {
+
+    //create variables
     private int id;
     private String username;
     private String email;
@@ -11,6 +13,8 @@ public class UserDTO {
     public UserDTO() {
     }
 
+
+    //create constructor
     public UserDTO(int id, String username, String email, String password, String firstname, String lastname) {
         this.id = id;
         this.username = username;
@@ -28,6 +32,8 @@ public class UserDTO {
         this.lastname = lastname;
     }
 
+
+    //create getter and setter
     public int getId() {
         return id;
     }

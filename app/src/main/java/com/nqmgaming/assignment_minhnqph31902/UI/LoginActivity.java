@@ -22,6 +22,7 @@ import com.nqmgaming.assignment_minhnqph31902.R;
 
 public class LoginActivity extends AppCompatActivity {
 
+    //declare variables
     LinearLayout btnLoginApple, btnLoginFacebook, btnLoginGoogle;
     EditText edtEmail, edtPassword;
     Button btnLogin;
@@ -29,22 +30,27 @@ public class LoginActivity extends AppCompatActivity {
     ImageView imgLogo;
     ImageButton btnBack;
     CheckBox cbRemember;
-
     private UserPreferences userPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //check if user is logged in
         userPreferences = new UserPreferences(this);
+
+        //if user is logged in, go to MainActivity
         if (userPreferences.isLogin()) {
+
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
             return;
+
         }
 
         setContentView(R.layout.activity_login);
 
+        //mapping variables with view
         btnLoginApple = findViewById(R.id.btnApple);
         btnLoginFacebook = findViewById(R.id.btnFacebook);
         btnLoginGoogle = findViewById(R.id.btnGoogle);
@@ -55,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         txtForgotPassword = findViewById(R.id.txtForgotPassword);
         txtRegister = findViewById(R.id.txtRegister);
 
-        Button btnLogin = findViewById(R.id.btnLogin);
+        btnLogin = findViewById(R.id.btnLogin);
 
         imgLogo = findViewById(R.id.imgLogoApp);
 
@@ -63,33 +69,46 @@ public class LoginActivity extends AppCompatActivity {
 
         cbRemember = findViewById(R.id.cbRememberMe);
 
+        //set logo for app
         Glide.with(this)
                 .load(R.drawable.minh)
                 .transition(DrawableTransitionOptions.withCrossFade(500))
                 .transform(new CircleCrop())
                 .into(imgLogo);
 
+        //set event click for buttons and textviews
 
-
+        //set event click for txtRegister
         txtRegister.setOnClickListener(v -> {
+
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             finish();
+
         });
 
+        //set event click for txtForgotPassword
         txtForgotPassword.setOnClickListener(v -> {
+
             startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
         });
 
+        //set event click for btnBack
         btnBack.setOnClickListener(v -> {
             startActivity(new Intent(LoginActivity.this, GetStartActivity.class));
             finish();
         });
 
+        //set event click for btnLogin
         btnLogin.setOnClickListener(v -> {
+
+            //get email and password from edittext
             String email = edtEmail.getText().toString().trim();
             String password = edtPassword.getText().toString().trim();
 
+            //check if email and password is empty
             try {
+
+                //check if email is empty
                 if (email.isEmpty()) {
                     edtEmail.setError("Email is required!");
                     edtEmail.requestFocus();
@@ -111,6 +130,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
+                //check if password is empty
                 if (password.isEmpty()) {
                     edtPassword.setError("Password is required!");
                     edtPassword.requestFocus();
@@ -123,14 +143,20 @@ public class LoginActivity extends AppCompatActivity {
                     edtPassword.requestFocus();
                     return;
                 }
+
+                //set login status
                 if (cbRemember.isChecked()) {
                     userPreferences.setLogin(true);
                 }
+
+                //go to MainActivity
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
 
             } catch (Exception e) {
+
                 e.printStackTrace();
+
             }
         });
 

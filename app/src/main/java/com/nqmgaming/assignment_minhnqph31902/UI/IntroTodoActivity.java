@@ -15,6 +15,7 @@ public class IntroTodoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro_todo);
 
+        //set delay 3s
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

@@ -17,6 +17,8 @@ import com.nqmgaming.assignment_minhnqph31902.DTO.UserDTO;
 import com.nqmgaming.assignment_minhnqph31902.R;
 
 public class SetNewPasswordActivity extends AppCompatActivity {
+
+    //declare variables
     ImageButton imgBackSetNewPassword;
     Button btnSetNewPassword;
     TextView tvLoginHere, tvRegisterHere;
@@ -27,6 +29,7 @@ public class SetNewPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_new_password);
 
+        //mapping variables with view
         imgBackSetNewPassword = findViewById(R.id.btnBackForgotPasswordTow);
 
         btnSetNewPassword = findViewById(R.id.btnResetPasswordFinal);
@@ -37,22 +40,29 @@ public class SetNewPasswordActivity extends AppCompatActivity {
         edtNewPassword = findViewById(R.id.edtEmailForgotPassword);
         edtConfirmNewPassword = findViewById(R.id.edtEmailForgotPasswordConfirm);
 
+        //set event click for buttons and textview
+
+        //setOnCLickListener for imgBackSetNewPassword
         imgBackSetNewPassword.setOnClickListener(v -> {
             startActivity(new Intent(SetNewPasswordActivity.this, LoginActivity.class));
             finish();
         });
 
+        //setOnCLickListener for tvLoginHere
         tvLoginHere.setOnClickListener(v -> {
             startActivity(new Intent(SetNewPasswordActivity.this, LoginActivity.class));
             finish();
         });
 
+        //setOnCLickListener for tvRegisterHere
         tvRegisterHere.setOnClickListener(v -> {
             startActivity(new Intent(SetNewPasswordActivity.this, RegisterActivity.class));
             finish();
         });
 
+        //Get data from ForgotPasswordActivity
         Intent intent = getIntent();
+
         String idDTOString = intent.getStringExtra("idDTO");
         String username = intent.getStringExtra("userDTO");
         String email = intent.getStringExtra("emailDTO");
@@ -60,14 +70,18 @@ public class SetNewPasswordActivity extends AppCompatActivity {
         String firstName = intent.getStringExtra("firstNameDTO");
         String lastName = intent.getStringExtra("lastNameDTO");
 
-        Toast.makeText(this, idDTOString + username + email + password + firstName + lastName, Toast.LENGTH_SHORT).show();
-
+        //setOnCLickListener for btnSetNewPassword
         btnSetNewPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //get data from edtNewPassword and edtConfirmNewPassword
                 String newPassword = edtNewPassword.getText().toString().trim();
                 String confirmNewPassword = edtConfirmNewPassword.getText().toString().trim();
 
+                //check data
+
+                //check if newPassword is empty
                 if (newPassword.isEmpty()) {
                     edtNewPassword.setError("New password is required!");
                     edtNewPassword.requestFocus();
@@ -87,15 +101,19 @@ public class SetNewPasswordActivity extends AppCompatActivity {
                 }
 
                 UserDAO userDAO = new UserDAO(SetNewPasswordActivity.this);
+
+                //check if newPassword is the same as old password
                 if (userDAO.checkPassword(newPassword)) {
                     edtNewPassword.setError("Please enter a different password!");
                     edtNewPassword.requestFocus();
                     return;
                 }
+
+                //update new password to database
                 int idDTO = Integer.parseInt(idDTOString);
                 UserDTO userDTO = new UserDTO(idDTO, username, email, newPassword, firstName, lastName);
-                Toast.makeText(SetNewPasswordActivity.this, idDTO+username+email+newPassword, Toast.LENGTH_SHORT).show();
 
+                //check if update successfully
                 int result = userDAO.updateUser(userDTO);
                 if (result > 0) {
                     Toast.makeText(SetNewPasswordActivity.this, "Reset password successfully!", Toast.LENGTH_SHORT).show();
@@ -106,8 +124,11 @@ public class SetNewPasswordActivity extends AppCompatActivity {
                     builder.setMessage("Please log in again!");
                     builder.setCancelable(false);
                     builder.setPositiveButton("OK", (dialog, which) -> {
+
+                        //go to LoginActivity
                         startActivity(new Intent(SetNewPasswordActivity.this, LoginActivity.class));
                         finish();
+
                     });
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
