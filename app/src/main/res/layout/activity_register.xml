@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".UI.RegisterActivity">
+
+        <ImageButton
+            android:id="@+id/btnBackRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/back"
+            android:src="@drawable/baseline_arrow_back_24"
+            app:backgroundTint="#FFFFFF"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imgLogoAppRegister"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="30dp"
+            android:contentDescription="@string/logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtWelcomeback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/create_an_account"
+            android:textColor="#EFAE71"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgLogoAppRegister" />
+
+        <TextView
+            android:id="@+id/txtEnter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/never_miss_your_work_again"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtWelcomeback" />
+
+        <LinearLayout
+            android:id="@+id/linearLoginBySociaRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtEnter">
+
+            <LinearLayout
+                android:id="@+id/btnAppleRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/background_button_logo"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/apple"
+                    android:src="@drawable/apple_logo" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnGoogleRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/background_button_logo"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/google"
+                    android:src="@drawable/search" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnFacebookRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/background_button_logo"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/facebook"
+                    android:src="@drawable/facebook" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linearOr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLoginBySociaRegister">
+
+            <View
+                android:layout_width="45dp"
+                android:layout_height="1dp"
+                android:layout_marginEnd="2dp"
+                android:background="#D8D2CC" />
+
+            <View
+                android:layout_width="45dp"
+                android:layout_height="1dp"
+                android:layout_marginEnd="2dp"
+                android:background="@color/black" />
+
+            <View
+                android:layout_width="45dp"
+                android:layout_height="1dp"
+                android:background="#D8D2CC" />
+
+            <TextView
+                android:id="@+id/txtOr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="@string/or"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <View
+                android:layout_width="45dp"
+                android:layout_height="1dp"
+                android:layout_marginEnd="2dp"
+                android:background="#D8D2CC" />
+
+            <View
+                android:layout_width="45dp"
+                android:layout_height="1dp"
+                android:layout_marginEnd="2dp"
+                android:background="@color/black" />
+
+            <View
+                android:layout_width="45dp"
+                android:layout_height="1dp"
+                android:background="#D8D2CC" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearNameRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:baselineAligned="false"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearOr">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/edtFirstNameRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:autofillHints="name"
+                    android:hint="@string/first_name"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/edtLastNameRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:autofillHints="name"
+                    android:hint="@string/last_name"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/iplUsernameRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearNameRegister"
+            app:startIconDrawable="@drawable/user">
+
+            <EditText
+                android:id="@+id/edtUsernameRegister"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints="emailAddress"
+                android:hint="@string/enter_your_username"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/iplEmailRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iplUsernameRegister"
+            app:startIconDrawable="@drawable/mail">
+
+            <EditText
+                android:id="@+id/edtEmailRegister"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints="emailAddress"
+                android:hint="@string/enter_your_email"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/iplPasswordRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iplEmailRegister"
+            app:passwordToggleEnabled="true"
+            app:startIconDrawable="@drawable/padlock">
+
+            <EditText
+                android:id="@+id/edtPasswordRegister"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints="password"
+                android:hint="@string/enter_your_password"
+                android:imeOptions="actionNext"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/iplPasswordConfirmRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iplPasswordRegister"
+            app:passwordToggleEnabled="true"
+            app:startIconDrawable="@drawable/padlock">
+
+            <EditText
+                android:id="@+id/edtPasswordConfirmRegister"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints="password"
+                android:hint="@string/enter_your_password"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnRegisterRegister"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/background_btn_login"
+            android:text="@string/registert"
+            android:textColor="#EFAE71"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:backgroundTint="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iplPasswordConfirmRegister"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnRegisterRegister">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:text="@string/already_have_an_account" />
+
+            <TextView
+                android:id="@+id/txtLoginRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login"
+                android:textColor="#EFAE71"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
