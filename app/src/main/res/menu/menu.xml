@@ -5,12 +5,21 @@
         android:id="@+id/home"
         android:actionLayout="@layout/lottie_home"
         android:orderInCategory="100"
-        android:title="@string/home"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/search"
+        android:actionLayout="@layout/lottie_user"
+        android:orderInCategory="100"
+        android:title="@string/search" />
+    <item
+        android:id="@+id/calendar"
+        android:actionLayout="@layout/lottie_user"
+        android:orderInCategory="100"
+        android:title="@string/calendar" />
     <item
         android:id="@+id/user"
         android:actionLayout="@layout/lottie_user"
         android:orderInCategory="100"
-        android:title="@string/home"
-        app:showAsAction="ifRoom" />
+        android:title="@string/profile" />
 </menu>

@@ -55,4 +55,7 @@
     <string name="set_new_password_for">Set New Password For</string>
     <string name="enter_your_username">Enter your username</string>
     <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="search">Search</string>
+    <string name="calendar">Calendar</string>
 </resources>
