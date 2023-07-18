@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.LoginActivity">
+    tools:context=".UI.Account.LoginActivity">
+
     <ImageButton
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/baseline_arrow_back_24"
         app:backgroundTint="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/baseline_arrow_back_24"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imgLogoApp"
@@ -22,6 +23,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/LottieLogin"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="18dp"
+        android:elevation="-1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/circle" />
 
     <TextView
         android:id="@+id/txtWelcomeback"
@@ -242,12 +256,12 @@
             android:textStyle="bold" />
 
         <TextView
-            android:padding="5dp"
             android:id="@+id/txtForgotPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginStart="10dp"
+            android:padding="5dp"
             android:text="@string/forgot_your_password"
             android:textColor="@color/black" />
 
@@ -295,7 +309,6 @@
             android:textStyle="bold" />
 
     </LinearLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

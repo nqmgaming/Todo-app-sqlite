@@ -1,4 +1,4 @@
-package com.nqmgaming.assignment_minhnqph31902.UI;
+package com.nqmgaming.assignment_minhnqph31902.UI.Intro;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -11,6 +11,7 @@ import android.widget.Button;
 import com.nqmgaming.assignment_minhnqph31902.SlideAdapter;
 import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
+import com.nqmgaming.assignment_minhnqph31902.UI.MainActivity;
 
 import me.relex.circleindicator.CircleIndicator;
 

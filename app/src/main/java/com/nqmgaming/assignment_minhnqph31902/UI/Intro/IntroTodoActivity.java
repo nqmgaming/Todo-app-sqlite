@@ -1,4 +1,4 @@
-package com.nqmgaming.assignment_minhnqph31902.UI;
+package com.nqmgaming.assignment_minhnqph31902.UI.Intro;
 
 import androidx.appcompat.app.AppCompatActivity;
 

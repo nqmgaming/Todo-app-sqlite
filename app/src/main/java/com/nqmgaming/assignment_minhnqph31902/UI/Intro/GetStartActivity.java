@@ -1,4 +1,4 @@
-package com.nqmgaming.assignment_minhnqph31902.UI;
+package com.nqmgaming.assignment_minhnqph31902.UI.Intro;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,9 @@ import android.widget.CheckBox;
 
 import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
+import com.nqmgaming.assignment_minhnqph31902.UI.Account.LoginActivity;
+import com.nqmgaming.assignment_minhnqph31902.UI.Account.RegisterActivity;
+import com.nqmgaming.assignment_minhnqph31902.UI.MainActivity;
 
 public class GetStartActivity extends AppCompatActivity {
 

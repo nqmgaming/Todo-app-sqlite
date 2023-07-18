@@ -1,4 +1,4 @@
-package com.nqmgaming.assignment_minhnqph31902.UI;
+package com.nqmgaming.assignment_minhnqph31902.UI.Account;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +21,7 @@ public class SetNewPasswordActivity extends AppCompatActivity {
     //declare variables
     ImageButton imgBackSetNewPassword;
     Button btnSetNewPassword;
-    TextView tvLoginHere, tvRegisterHere;
+    TextView tvLoginHere, tvRegisterHere, EMail;
     EditText edtNewPassword, edtConfirmNewPassword;
 
     @Override
@@ -36,6 +36,7 @@ public class SetNewPasswordActivity extends AppCompatActivity {
 
         tvLoginHere = findViewById(R.id.tvBackToLogin);
         tvRegisterHere = findViewById(R.id.tvRegisterHere);
+        EMail = findViewById(R.id.Email);
 
         edtNewPassword = findViewById(R.id.edtEmailForgotPassword);
         edtConfirmNewPassword = findViewById(R.id.edtEmailForgotPasswordConfirm);
@@ -70,6 +71,7 @@ public class SetNewPasswordActivity extends AppCompatActivity {
         String firstName = intent.getStringExtra("firstNameDTO");
         String lastName = intent.getStringExtra("lastNameDTO");
 
+        EMail.setText(email);
         //setOnCLickListener for btnSetNewPassword
         btnSetNewPassword.setOnClickListener(new View.OnClickListener() {
             @Override

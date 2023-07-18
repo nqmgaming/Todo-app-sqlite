@@ -1,4 +1,4 @@
-package com.nqmgaming.assignment_minhnqph31902.UI;
+package com.nqmgaming.assignment_minhnqph31902.UI.Account;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +19,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.nqmgaming.assignment_minhnqph31902.DAO.UserDAO;
 import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
+import com.nqmgaming.assignment_minhnqph31902.UI.Intro.GetStartActivity;
+import com.nqmgaming.assignment_minhnqph31902.UI.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
