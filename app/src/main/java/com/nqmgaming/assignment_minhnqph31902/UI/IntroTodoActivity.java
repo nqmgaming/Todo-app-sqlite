@@ -20,7 +20,8 @@ public class IntroTodoActivity extends AppCompatActivity {
             @Override
             public void run() {
                 startActivity(new Intent(IntroTodoActivity.this, WelcomeActivity.class));
+                finish();
             }
-        }, 3000);
+        }, 3500);
     }
 }

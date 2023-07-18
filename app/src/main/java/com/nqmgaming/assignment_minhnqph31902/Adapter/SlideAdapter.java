@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.nqmgaming.assignment_minhnqph31902.R;
 
 public class SlideAdapter extends PagerAdapter {
@@ -25,23 +26,23 @@ public class SlideAdapter extends PagerAdapter {
 
     //Create 3 int images for todo app
     public int[] slide_images = {
-            R.drawable.welcomeone,
-            R.drawable.welcometwo,
-            R.drawable.welcomethree
+            R.raw.welcomeone,
+            R.raw.welcometwo,
+            R.raw.welcomethree
     };
 
     //Create 3 string short title for todo app
     public String[] slide_headings = {
             "Welcome to Todo App",
-            "Add new task",
-            "Delete task"
+            "Increase work productivity",
+            "Easy to use"
     };
 
     //Create 3 string short des for todo app
     public String[] slide_descs = {
             "This is a simple todo app",
-            "You can add new task by click on the add button",
-            "You can delete task by click on the delete button"
+            "Increase your work productivity",
+            "App is very easy to use"
     };
 
     //get count of slide_headings
@@ -65,12 +66,12 @@ public class SlideAdapter extends PagerAdapter {
         View view = layoutInflater.inflate(R.layout.slide_layout, container, false);
 
         //mapping variables with view
-        ImageView slideImageView = view.findViewById(R.id.imgSlide);
+        LottieAnimationView slideImageView = view.findViewById(R.id.imgSlide);
         TextView txtTitle = view.findViewById(R.id.txtTitle);
         TextView txtDescription = view.findViewById(R.id.txtDescription);
 
         //set image, title, description for each slide
-        slideImageView.setImageResource(slide_images[position]);
+        slideImageView.setAnimation(slide_images[position]);
         txtTitle.setText(slide_headings[position]);
         txtDescription.setText(slide_descs[position]);
 
