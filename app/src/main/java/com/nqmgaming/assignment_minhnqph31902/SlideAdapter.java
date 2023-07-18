@@ -1,4 +1,4 @@
-package com.nqmgaming.assignment_minhnqph31902.Adapter;
+package com.nqmgaming.assignment_minhnqph31902;
 
 import android.content.Context;
 import android.view.LayoutInflater;

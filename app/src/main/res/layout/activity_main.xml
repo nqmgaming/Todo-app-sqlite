@@ -6,16 +6,26 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".UI.MainActivity">
-
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <fragment
+        android:id="@+id/main_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:defaultNavHost="true"
+        app:navGraph='@navigation/navigation'
+        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <me.ibrahimsn.lib.SmoothBottomBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottomBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/menu"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
