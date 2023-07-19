@@ -104,7 +104,6 @@ public class UserDAO {
         //create condition
         String[] condition = new String[]{String.valueOf(userDTO.getId())};
 
-        //try catch
         try {
 
             //update user
