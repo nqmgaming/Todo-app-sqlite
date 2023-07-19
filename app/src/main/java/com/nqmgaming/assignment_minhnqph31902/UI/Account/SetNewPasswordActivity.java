@@ -102,10 +102,9 @@ public class SetNewPasswordActivity extends AppCompatActivity {
                     return;
                 }
 
-                UserDAO userDAO = new UserDAO(SetNewPasswordActivity.this);
 
                 //check if newPassword is the same as old password
-                if (userDAO.checkPassword(newPassword)) {
+                if (newPassword.equals(password)) {
                     edtNewPassword.setError("Please enter a different password!");
                     edtNewPassword.requestFocus();
                     return;

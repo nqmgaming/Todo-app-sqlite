@@ -122,6 +122,8 @@ public class UserDAO {
 
     }
 
+    //Update Password where id
+
     //Check user exist return boolean
     public boolean checkUserExist(String username) {
 
@@ -303,79 +305,5 @@ public class UserDAO {
     }
 
     //check if password match return boolean
-    public boolean checkPassword(String password) {
-
-        //create result variable
-        boolean result = false;
-
-        //create condition
-        String[] condition = new String[]{
-                password
-        };
-
-        //try catch
-        try {
-
-            //create cursor
-            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM user_table WHERE password = ?", condition);
-
-            //check cursor if move to first return true
-            if (cursor.moveToFirst()) {
-
-                //set result to true if cursor move to first because password match
-                result = true;
-
-            }
-
-            cursor.close();
-
-        } catch (SQLException e) {
-
-            //print error
-            e.printStackTrace();
-
-        }
-
-        //return result
-        return result;
-    }
-
     //Get id by username and email return int
-    public int getIdByUsernameAndEmail(String username, String email) {
-
-        //create result variable
-        int result = -1;
-
-        //create condition
-        String[] condition = new String[]{username, email};
-
-        //try catch
-        try {
-
-            //create cursor
-            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM user_table WHERE username = ? AND email = ?", condition);
-
-            //check cursor if move to first return true
-            if (cursor.moveToFirst()) {
-
-                //set result is id
-                result = cursor.getInt(0);
-            }
-
-            //close cursor because we don't need it anymore
-            cursor.close();
-
-        } catch (SQLException e) {
-
-            //print error
-            e.printStackTrace();
-
-        }
-
-        //return result
-        return result;
-
-    }
-
-
 }

@@ -103,17 +103,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 //get userDTO
                 UserDTO userDTO = userDAO.checkUsernameAndEmailAfter(username, email);
 
-                //get id
-                int id = userDAO.getIdByUsernameAndEmail(username, email);
-
-                //set id for userDTO
-                userDTO.setId(id);
-
                 //Intent to SetNewPasswordActivity
                 Intent intent = new Intent(ForgotPasswordActivity.this, SetNewPasswordActivity.class);
-
-                String idString = String.valueOf(id);
-                intent.putExtra("idDTO", idString);
+                intent.putExtra("idDTO", userDTO.getId());
                 intent.putExtra("userDTO", userDTO.getUsername());
                 intent.putExtra("emailDTO", userDTO.getEmail());
                 intent.putExtra("passwordDTO", userDTO.getPassword());
