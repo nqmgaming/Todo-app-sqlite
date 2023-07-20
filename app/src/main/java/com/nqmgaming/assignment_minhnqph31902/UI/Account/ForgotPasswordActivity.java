@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import com.nqmgaming.assignment_minhnqph31902.DAO.UserDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.UserDTO;
 import com.nqmgaming.assignment_minhnqph31902.R;
+
+import io.github.cutelibs.cutedialog.CuteDialog;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
@@ -105,7 +108,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
                 //Intent to SetNewPasswordActivity
                 Intent intent = new Intent(ForgotPasswordActivity.this, SetNewPasswordActivity.class);
-                intent.putExtra("idDTO", userDTO.getId());
+                intent.putExtra("idDTO", userDTO.getId() + "");
                 intent.putExtra("userDTO", userDTO.getUsername());
                 intent.putExtra("emailDTO", userDTO.getEmail());
                 intent.putExtra("passwordDTO", userDTO.getPassword());
@@ -117,7 +120,27 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 finish();
 
             } else {
+                new CuteDialog.withAnimation(ForgotPasswordActivity.this)
+                        .setAnimation(R.raw.cancel)
+                        .setTitle("Error")
+                        .setDescription("Username or email is incorrect!")
+                        .setPositiveButtonText("Try Again", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
+                            }
+                        })
+                        .setNegativeButtonText("Return Login", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+
+                            }
+                        })
+                        .show();
                 //show error message
                 edtUsernameForgotPassword.setError("Username or email is incorrect!");
                 edtUsernameForgotPassword.requestFocus();

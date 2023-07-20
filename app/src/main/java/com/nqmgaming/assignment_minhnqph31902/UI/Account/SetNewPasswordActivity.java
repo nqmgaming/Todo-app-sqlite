@@ -16,6 +16,8 @@ import com.nqmgaming.assignment_minhnqph31902.DAO.UserDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.UserDTO;
 import com.nqmgaming.assignment_minhnqph31902.R;
 
+import io.github.cutelibs.cutedialog.CuteDialog;
+
 public class SetNewPasswordActivity extends AppCompatActivity {
 
     //declare variables
@@ -82,7 +84,7 @@ public class SetNewPasswordActivity extends AppCompatActivity {
                 String confirmNewPassword = edtConfirmNewPassword.getText().toString().trim();
 
                 //check data
-
+                UserDAO userDAO = new UserDAO(SetNewPasswordActivity.this);
                 //check if newPassword is empty
                 if (newPassword.isEmpty()) {
                     edtNewPassword.setError("New password is required!");
@@ -111,28 +113,39 @@ public class SetNewPasswordActivity extends AppCompatActivity {
                 }
 
                 //update new password to database
-                int idDTO = Integer.parseInt(idDTOString);
+                //update new password to database
+                int idDTO;
+                try {
+                    idDTO = Integer.parseInt(idDTOString);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    // Handle the exception, e.g., show an error message or take appropriate action.
+                    return; // Exit the method since the idDTO is not valid.
+                }
+
                 UserDTO userDTO = new UserDTO(idDTO, username, email, newPassword, firstName, lastName);
 
                 //check if update successfully
                 int result = userDAO.updateUser(userDTO);
                 if (result > 0) {
-                    Toast.makeText(SetNewPasswordActivity.this, "Reset password successfully!", Toast.LENGTH_SHORT).show();
+                    new CuteDialog.withAnimation(SetNewPasswordActivity.this)
+                            .setAnimation(R.raw.done)
+                            .setTitle("Success!")
+                            .setDescription("Your password has been reset successfully!")
+                            .setPositiveButtonText("Ok", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
 
-                    //Alert Dialog to notify successful password reset
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SetNewPasswordActivity.this);
-                    builder.setTitle("Reset password successfully!");
-                    builder.setMessage("Please log in again!");
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("OK", (dialog, which) -> {
+                                    Intent intent = new Intent(SetNewPasswordActivity.this, LoginActivity.class);
+                                    intent.putExtra("emailDTO", email);
+                                    intent.putExtra("passwordDTO", newPassword);
+                                    intent.putExtra("ok", "ok");
+                                    startActivity(intent);
 
-                        //go to LoginActivity
-                        startActivity(new Intent(SetNewPasswordActivity.this, LoginActivity.class));
-                        finish();
-
-                    });
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
+                                }
+                            })
+                            .hideNegativeButton(true)
+                            .show();
 
                 } else {
                     Toast.makeText(SetNewPasswordActivity.this, "Reset password failed!" + result, Toast.LENGTH_SHORT).show();

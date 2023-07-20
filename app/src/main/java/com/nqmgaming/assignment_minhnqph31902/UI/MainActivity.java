@@ -21,11 +21,8 @@ import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
 import com.nqmgaming.assignment_minhnqph31902.databinding.ActivityMainBinding;
 
-import me.ibrahimsn.lib.SmoothBottomBar;
-
 public class MainActivity extends AppCompatActivity {
     UserPreferences userPreferences;
-    SmoothBottomBar bottomBar;
     ActivityMainBinding binding;
 
     @Override

@@ -49,8 +49,24 @@ public class DataBaseTodoAppHelper extends SQLiteOpenHelper {
 
     }
 
-        @Override
+
+    @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            //drop table todo
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TODO);
+            //create table todo
+
+            String TODO_TABLE = "CREATE TABLE " + TABLE_TODO + " ( id INTEGER PRIMARY KEY,\n" +
+                    "  name TEXT NOT NULL,\n" +
+                    "  content TEXT NOT NULL,\n" +
+                    "  status INTEGER NOT NULL,\n" +
+                    "  start_date TEXT NOT NULL,\n" +
+                    "  end_date TEXT NOT NULL,\n" +
+                    "  user_id INTEGER NOT NULL,\n" +
+                    "  FOREIGN KEY (user_id) REFERENCES user (id))";
+
+            db.execSQL(TODO_TABLE);
 
     }
+
 }

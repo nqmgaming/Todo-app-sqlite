@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -21,6 +23,8 @@ import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
 import com.nqmgaming.assignment_minhnqph31902.UI.Intro.GetStartActivity;
 import com.nqmgaming.assignment_minhnqph31902.UI.MainActivity;
+
+import io.github.cutelibs.cutedialog.CuteDialog;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -79,6 +83,22 @@ public class LoginActivity extends AppCompatActivity {
                 .into(imgLogo);
 
         //set event click for buttons and textviews
+        Intent intent = getIntent();
+        String emailAccount = intent.getStringExtra("emailDTO");
+        String passwordAccount = intent.getStringExtra("passwordDTO");
+
+        if (emailAccount != null && passwordAccount != null) {
+            // Check if emailAccount and passwordAccount are not null before setting the text
+            if (emailAccount != null) {
+                edtEmail.setText(emailAccount);
+            }
+
+            if (passwordAccount != null) {
+                edtPassword.setText(passwordAccount);
+            }
+        }
+
+
 
         //set event click for txtRegister
         txtRegister.setOnClickListener(v -> {
@@ -90,7 +110,6 @@ public class LoginActivity extends AppCompatActivity {
 
         //set event click for txtForgotPassword
         txtForgotPassword.setOnClickListener(v -> {
-
             startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
         });
 
@@ -150,10 +169,22 @@ public class LoginActivity extends AppCompatActivity {
                 if (cbRemember.isChecked()) {
                     userPreferences.setLogin(true);
                 }
+                new CuteDialog.withAnimation(LoginActivity.this)
+                        .setAnimation(R.raw.done)
+                        .setTitle("Success!")
+                        .setDescription("Login successfully!")
+                        .setPositiveButtonText("Ok", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                finish();
+                            }
+                        })
+                        .hideNegativeButton(true)
+                        .show();
 
                 //go to MainActivity
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
+
 
             } catch (Exception e) {
 

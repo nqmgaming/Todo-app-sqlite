@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -18,6 +19,9 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.nqmgaming.assignment_minhnqph31902.DAO.UserDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.UserDTO;
 import com.nqmgaming.assignment_minhnqph31902.R;
+import com.nqmgaming.assignment_minhnqph31902.UI.MainActivity;
+
+import io.github.cutelibs.cutedialog.CuteDialog;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -203,10 +207,23 @@ public class RegisterActivity extends AppCompatActivity {
             //check if insert success
             if (result > 0) {
 
-                Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                new CuteDialog.withAnimation(RegisterActivity.this)
+                        .setAnimation(R.raw.done)
+                        .setTitle("Success!")
+                        .setDescription("Login successfully!")
+                        .setPositiveButtonText("Ok", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                finish();
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                finish();
+
+                            }
+                        })
+                        .hideNegativeButton(true)
+                        .show();
+
             } else {
 
                 //if insert failed, show error message
