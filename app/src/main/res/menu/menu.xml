@@ -3,23 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/home"
-        android:actionLayout="@layout/lottie_home"
         android:orderInCategory="100"
-        app:showAsAction="always"
+        android:icon="@drawable/home"
         android:title="@string/home" />
     <item
         android:id="@+id/search"
-        android:actionLayout="@layout/lottie_user"
         android:orderInCategory="100"
+        android:icon="@drawable/search"
         android:title="@string/search" />
     <item
         android:id="@+id/calendar"
-        android:actionLayout="@layout/lottie_user"
         android:orderInCategory="100"
+        android:icon="@drawable/calendar"
         android:title="@string/calendar" />
     <item
         android:id="@+id/user"
-        android:actionLayout="@layout/lottie_user"
         android:orderInCategory="100"
+        android:icon="@drawable/user"
         android:title="@string/profile" />
 </menu>

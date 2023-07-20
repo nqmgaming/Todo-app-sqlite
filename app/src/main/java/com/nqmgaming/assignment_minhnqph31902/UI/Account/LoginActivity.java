@@ -168,6 +168,7 @@ public class LoginActivity extends AppCompatActivity {
                 //set login status
                 if (cbRemember.isChecked()) {
                     userPreferences.setLogin(true);
+                    userPreferences.setIdUser(userDAO.getIdByEmail(email));
                 }
                 new CuteDialog.withAnimation(LoginActivity.this)
                         .setAnimation(R.raw.done)

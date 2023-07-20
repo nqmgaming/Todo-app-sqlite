@@ -43,4 +43,20 @@ public class UserPreferences {
                 .apply();
 
     }
+
+    //Save id user
+    public void setIdUser(int id) {
+
+        sharedPreferences.edit()
+                .putInt("id_user", id)
+                .apply();
+
+    }
+
+    //Get id user
+    public int getIdUser() {
+
+        return sharedPreferences.getInt("id_user", 0);
+
+    }
 }

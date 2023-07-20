@@ -303,6 +303,89 @@ public class UserDAO {
 
     }
 
-    //check if password match return boolean
-    //Get id by username and email return int
+    //Get id by email
+    public int getIdByEmail(String email) {
+
+        //create result variable
+        int result = -1;
+
+        //create condition
+        String[] condition = new String[]{
+                email
+        };
+
+        //try catch
+        try {
+
+            //create cursor
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM user_table WHERE email = ?", condition);
+
+            //check cursor if move to first return true
+            if (cursor.moveToFirst()) {
+
+                //set result to true if cursor move to first because account match
+                result = cursor.getInt(0);
+
+            }
+
+            //close cursor because we don't need it anymore
+            cursor.close();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+        }
+
+        //return result
+        return result;
+    }
+
+    //Get user by id return UserDTO
+    public UserDTO getUserById(int id) {
+
+        //create userDTO variable
+        UserDTO userDTO = null;
+
+        //create condition
+        String[] condition = new String[]{
+                String.valueOf(id)
+        };
+
+        //try catch
+        try {
+
+            //create cursor
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM user_table WHERE id = ?", condition);
+
+            //check cursor if move to first set data to userDTO
+            if (cursor.moveToFirst()) {
+
+                //create userDTO
+                userDTO = new UserDTO();
+
+                //set data to userDTO
+                userDTO.setId(cursor.getInt(0));
+                userDTO.setUsername(cursor.getString(1));
+                userDTO.setEmail(cursor.getString(2));
+                userDTO.setPassword(cursor.getString(3));
+                userDTO.setFirstname(cursor.getString(4));
+                userDTO.setLastname(cursor.getString(5));
+
+            }
+
+            //close cursor because we don't need it anymore
+            cursor.close();
+
+        } catch (SQLException e) {
+
+            //print error
+            e.printStackTrace();
+
+        }
+
+        //return userDTO
+        return userDTO;
+
+    }
 }
