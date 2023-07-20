@@ -23,6 +23,8 @@ import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
 import com.nqmgaming.assignment_minhnqph31902.UI.Intro.GetStartActivity;
 
+import io.github.cutelibs.cutedialog.CuteDialog;
+
 
 public class UserFragment extends Fragment {
     int id;
@@ -59,10 +61,24 @@ public class UserFragment extends Fragment {
         tvSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                preferences = new UserPreferences(getContext());
-                preferences.logout();
-                Intent intent = new Intent(getContext(), GetStartActivity.class);
-                startActivity(intent);
+                new CuteDialog.withAnimation(getContext())
+                        .setTitle("Sign out")
+                        .setDescription("Are you sure you want to sign out?")
+                        .setNegativeButtonText("No", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        }).setPositiveButtonText("Yes", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                preferences = new UserPreferences(getContext());
+                                preferences.logout();
+                                Intent intent = new Intent(getContext(), GetStartActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
             }
         });
 
