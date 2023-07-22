@@ -37,7 +37,6 @@ public class UserFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             id = args.getInt("id");
-            // Now you have the id, you can use it in your fragment as needed
         }
         return inflater.inflate(R.layout.fragment_user, container, false);
     }
@@ -76,6 +75,7 @@ public class UserFragment extends Fragment {
                                 preferences.logout();
                                 Intent intent = new Intent(getContext(), GetStartActivity.class);
                                 startActivity(intent);
+                                getActivity().finish();
                             }
                         })
                         .show();

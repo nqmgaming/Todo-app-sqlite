@@ -1,10 +1,9 @@
-package com.nqmgaming.assignment_minhnqph31902.Adapter;
+package com.nqmgaming.assignment_minhnqph31902.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 

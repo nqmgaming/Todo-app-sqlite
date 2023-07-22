@@ -25,48 +25,32 @@ public class DataBaseTodoAppHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        //create user table
-        String USER_TABLE = "CREATE TABLE " + TABLE_USER + " (id INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL,\n" +
-                "  username TEXT NOT NULL,\n" +
-                "  email TEXT NOT NULL,\n" +
-                "  password TEXT NOT NULL,\n" +
-                "  firstname TEXT NOT NULL,\n" +
-                "  lastname TEXT NOT NULL)";
-
+        // Create user table if it doesn't exist
+        String USER_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER + " (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "username TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, firstname TEXT NOT NULL, lastname TEXT NOT NULL)";
         db.execSQL(USER_TABLE);
 
-        //create todo table
-        String TODO_TABLE = "CREATE TABLE " + TABLE_TODO + " ( id INTEGER PRIMARY KEY,\n" +
-                "  name TEXT NOT NULL,\n" +
-                "  content TEXT NOT NULL,\n" +
-                "  status TEXT NOT NULL,\n" +
-                "  start_date TEXT NOT NULL,\n" +
-                "  end_date TEXT NOT NULL,\n" +
-                "  user_id INTEGER NOT NULL,\n" +
-                "  FOREIGN KEY (user_id) REFERENCES user (id))";
-
+        // Create todo table if it doesn't exist
+        String TODO_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_TODO + " (id INTEGER PRIMARY KEY, " +
+                "name TEXT NOT NULL, content TEXT NOT NULL, status INTEGER NOT NULL, " +
+                "start_date TEXT NOT NULL, end_date TEXT NOT NULL, user_id INTEGER NOT NULL, " +
+                "FOREIGN KEY (user_id) REFERENCES user_table (id))";
         db.execSQL(TODO_TABLE);
-
     }
 
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            //drop table todo
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TODO);
-            //create table todo
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
 
-            String TODO_TABLE = "CREATE TABLE " + TABLE_TODO + " ( id INTEGER PRIMARY KEY,\n" +
-                    "  name TEXT NOT NULL,\n" +
-                    "  content TEXT NOT NULL,\n" +
-                    "  status INTEGER NOT NULL,\n" +
-                    "  start_date TEXT NOT NULL,\n" +
-                    "  end_date TEXT NOT NULL,\n" +
-                    "  user_id INTEGER NOT NULL,\n" +
-                    "  FOREIGN KEY (user_id) REFERENCES user (id))";
-
-            db.execSQL(TODO_TABLE);
-
+        // Recreate the user table with the updated schema
+        String USER_TABLE = "CREATE TABLE " + TABLE_USER + " (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "username TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, firstname TEXT NOT NULL, " +
+                "lastname TEXT NOT NULL, new_column TEXT)";
+        db.execSQL(USER_TABLE);
     }
-
+    public void deleteTodoTable() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TODO);
+    }
 }
