@@ -15,5 +15,8 @@
     //indicator color
     <color name="inactive">#C4C4C4</color>
     <color name="active">#50C2C9</color>
+    //gray
+    <color name="gray">#C2BDBD</color>
+    <color name="grayCon">#E2E0E0</color>
 
 </resources>

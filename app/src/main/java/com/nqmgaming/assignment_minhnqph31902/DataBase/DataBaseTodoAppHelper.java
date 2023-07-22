@@ -14,6 +14,9 @@ public class DataBaseTodoAppHelper extends SQLiteOpenHelper {
     public static final String TABLE_USER = "user_table";
     public static final String TABLE_TODO = "todo_table";
 
+    //update not null for content and end_date in todo table
+    public static final String UPDATE_TODO_TABLE = "ALTER TABLE " + TABLE_TODO + " ADD COLUMN content TEXT NOT NULL";
+
     //create constructor
     public DataBaseTodoAppHelper(Context context) {
 
@@ -32,25 +35,23 @@ public class DataBaseTodoAppHelper extends SQLiteOpenHelper {
 
         // Create todo table if it doesn't exist
         String TODO_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_TODO + " (id INTEGER PRIMARY KEY, " +
-                "name TEXT NOT NULL, content TEXT NOT NULL, status INTEGER NOT NULL, " +
-                "start_date TEXT NOT NULL, end_date TEXT NOT NULL, user_id INTEGER NOT NULL, " +
+                "name TEXT NOT NULL, content TEXT NOT NULL  , status INTEGER NOT NULL, " +
+                "start_date TEXT NOT NULL, end_date TEXT NOT NULL , user_id INTEGER NOT NULL, " +
                 "FOREIGN KEY (user_id) REFERENCES user_table (id))";
         db.execSQL(TODO_TABLE);
+
+
     }
 
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
 
-        // Recreate the user table with the updated schema
-        String USER_TABLE = "CREATE TABLE " + TABLE_USER + " (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                "username TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, firstname TEXT NOT NULL, " +
-                "lastname TEXT NOT NULL, new_column TEXT)";
-        db.execSQL(USER_TABLE);
+        //update not null for content and end_date in todo table
+        db.execSQL("INSERT INTO " + TABLE_TODO + " VALUES (4, 'Todo 1', 'Content 1', 0, '2021-09-01', '2021-09-01', 1)");
+        db.execSQL("INSERT INTO " + TABLE_TODO + " VALUES (5, 'Todo 2', 'Content 2', 0, '2021-09-01', '2021-09-01', 1)");
+        db.execSQL("INSERT INTO " + TABLE_TODO + " VALUES (6, 'Todo 3', 'Content 3', 0, '2021-09-01', '2021-09-01', 1)");
+
     }
-    public void deleteTodoTable() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TODO);
-    }
+
 }

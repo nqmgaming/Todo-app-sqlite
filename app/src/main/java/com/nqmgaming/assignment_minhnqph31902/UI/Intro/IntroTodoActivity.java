@@ -15,13 +15,10 @@ public class IntroTodoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro_todo);
 
-        //set delay 3s
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(IntroTodoActivity.this, WelcomeActivity.class));
-                finish();
-            }
+        // Set delay 3s
+        new Handler().postDelayed(() -> {
+            startActivity(new Intent(IntroTodoActivity.this, WelcomeActivity.class));
+            finish();
         }, 3500);
     }
 }

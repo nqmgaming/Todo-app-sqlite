@@ -1,6 +1,5 @@
 package com.nqmgaming.assignment_minhnqph31902.UI.Account;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;

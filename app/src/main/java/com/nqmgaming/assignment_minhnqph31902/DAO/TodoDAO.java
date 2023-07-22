@@ -162,4 +162,33 @@ public class TodoDAO {
         //return array list
         return todoDTOArrayList;
     }
+
+    //Set status todo return int
+    public int setStatusTodo(TodoDTO todoDTO) {
+
+        //create result variable
+        int result = -1;
+
+        //create content values
+        ContentValues contentValues = new ContentValues();
+
+        //put data to content values
+        contentValues.put("status", todoDTO.getStatus());
+
+        //try catch
+        try {
+
+            //update data to database
+            result = sqLiteDatabase.update("todo_table", contentValues, "id=?", new String[]{String.valueOf(todoDTO.getId())});
+
+        } catch (SQLException e) {
+
+            //print error
+            e.printStackTrace();
+
+        }
+
+        //return result
+        return result;
+    }
 }

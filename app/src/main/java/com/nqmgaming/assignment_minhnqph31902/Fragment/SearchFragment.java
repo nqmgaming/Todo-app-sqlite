@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.nqmgaming.assignment_minhnqph31902.R;
 
+
 public class SearchFragment extends Fragment {
 
     @Override

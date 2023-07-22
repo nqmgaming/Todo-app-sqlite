@@ -2,9 +2,6 @@ package com.nqmgaming.assignment_minhnqph31902.UI;
 
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.nqmgaming.assignment_minhnqph31902.Fragment.CalendarFragment;
 import com.nqmgaming.assignment_minhnqph31902.Fragment.HomeFragment;
 import com.nqmgaming.assignment_minhnqph31902.Fragment.SearchFragment;
@@ -55,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void replaceFragment(Fragment fragment) {
+    public void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (fragment instanceof UserFragment) {
