@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,8 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
     private final Context context;
     private final ArrayList<TodoDTO> notDoneItemsList;
     private final ArrayList<TodoDTO> doneItemsList;
+
+    private ViewBinder viewBinderNotDone = new ViewBinder();
 
 
     public NotTodoAdapter(Context context, ArrayList<TodoDTO> notDoneItemsList, ArrayList<TodoDTO> doneItemsList) {
@@ -71,6 +74,21 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
             }
         });
 
+        viewBinderNotDone.bind(holder.swipeLayoutNotDone, String.valueOf(todoDTO.getId()));
+        holder.tvDeleteNotDone.setOnClickListener(v -> {
+            TodoDAO todoDAO = new TodoDAO(context);
+            todoDAO.deleteTodo(todoDTO);
+            notDoneItemsList.remove(position);
+            Toast.makeText(context, "Delete success", Toast.LENGTH_SHORT).show();
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, notDoneItemsList.size());
+        });
+        holder.tvEditNotDone.setOnClickListener(v -> {
+            Toast.makeText(context, "Edit success", Toast.LENGTH_SHORT).show();
+        });
+
+
+
     }
 
     @Override
@@ -83,6 +101,9 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
         TextView txtNameNotTodo;
         ConstraintLayout constraintNotTodo;
         CardView cardViewMotTodo;
+        ImageButton tvEditNotDone, tvDeleteNotDone;
+        SwipeLayout swipeLayoutNotDone;
+        LinearLayout linearLayoutNotDone;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -91,6 +112,10 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
             txtNameNotTodo = itemView.findViewById(R.id.tvNameNotTodo);
             constraintNotTodo = itemView.findViewById(R.id.constraintNotTodo);
             cardViewMotTodo = itemView.findViewById(R.id.cardViewNotTodo);
+            tvEditNotDone = itemView.findViewById(R.id.tvEditNotDone);
+            tvDeleteNotDone = itemView.findViewById(R.id.tvDeleteNotDone);
+            swipeLayoutNotDone = itemView.findViewById(R.id.swipeLayoutNotDone);
+            linearLayoutNotDone = itemView.findViewById(R.id.layoutCutomizeNotDone);
 
         }
     }

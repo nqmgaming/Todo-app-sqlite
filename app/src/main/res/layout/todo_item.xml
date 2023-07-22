@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    android:padding="5dp"
     app:cardCornerRadius="15dp">
 
     <com.apachat.swipereveallayout.core.SwipeLayout
@@ -21,23 +20,34 @@
             android:id="@+id/layoutCutomize"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <View
+                android:layout_gravity="center"
+                android:layout_width="2dp"
+                android:layout_height="50dp"
+                android:background="#DBCECE" />
 
             <ImageButton
                 android:id="@+id/tvEdit"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:backgroundTint="#0000FF"
-                android:src="@drawable/edit"/>
+                android:backgroundTint="#FFFFFF"
+                android:src="@drawable/edit" />
+
+            <View
+                android:layout_gravity="center"
+                android:layout_width="2dp"
+                android:layout_height="50dp"
+                android:background="#DBCECE" />
 
             <ImageButton
                 android:id="@+id/tvDelete"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:backgroundTint="#FF0000"
+                android:backgroundTint="#FFFFFF"
                 android:src="@drawable/delete" />
 
         </LinearLayout>
@@ -49,6 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:textAlignment="center">
+
 
             <CheckBox
                 android:id="@+id/checkboxAnimation"

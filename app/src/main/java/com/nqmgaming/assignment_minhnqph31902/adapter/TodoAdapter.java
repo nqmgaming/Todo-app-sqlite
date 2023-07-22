@@ -27,7 +27,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     private final Context context;
     private final ArrayList<TodoDTO> doneItemsList;
     private final ArrayList<TodoDTO> notDoneItemsList;
-    private final ViewBinder viewBinder = new ViewBinder();
+    private  ViewBinder viewBinderDone = new ViewBinder();
 
     public TodoAdapter(Context context, ArrayList<TodoDTO> doneItemsList, ArrayList<TodoDTO> notDoneItemsList) {
         this.context = context;
@@ -63,7 +63,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                 notifyItemRangeChanged(position, doneItemsList.size());
             }
         });
-        viewBinder.bind(holder.swipeLayout, String.valueOf(todoDTO.getId()));
+        viewBinderDone.bind(holder.swipeLayout, String.valueOf(todoDTO.getId()));
         holder.tvDelete.setOnClickListener(v -> {
             TodoDAO todoDAO = new TodoDAO(context);
             todoDAO.deleteTodo(todoDTO);
