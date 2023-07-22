@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:backgroundTint="#0000FF"
-                android:src="@drawable/edit" />
+                android:src="@drawable/edit"/>
 
             <ImageButton
                 android:id="@+id/tvDelete"
