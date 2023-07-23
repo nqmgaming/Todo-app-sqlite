@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -44,11 +43,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         //set event click for buttons and textview
 
         //setOnCLickListener for imgBackForgotPassword
-        imgBackForgotPassword.setOnClickListener(v -> {
-
-            finish();
-
-        });
+        imgBackForgotPassword.setOnClickListener(v -> finish());
 
         //setOnCLickListener for tvRegisterHere
         tvRegisterHere.setOnClickListener(v -> {
@@ -124,27 +119,21 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         .setAnimation(R.raw.cancel)
                         .setTitle("Error")
                         .setDescription("Username or email is incorrect!")
-                        .setPositiveButtonText("Try Again", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                        .setPositiveButtonText("Try Again", v1 -> {
 
-                            }
                         })
-                        .setNegativeButtonText("Return Login", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                        .setNegativeButtonText("Return Login", v12 -> {
 
-                                Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                                finish();
+                            Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
 
-                            }
                         })
                         .show();
                 //show error message
                 edtUsernameForgotPassword.setError("Username or email is incorrect!");
                 edtUsernameForgotPassword.requestFocus();
-                return;
+
 
             }
         });

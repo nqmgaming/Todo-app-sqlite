@@ -12,15 +12,6 @@ public class TodoDTO {
     public TodoDTO() {
     }
 
-    public TodoDTO(int id, String name, String content, int status, String startDate, String endDate, int userId) {
-        this.id = id;
-        this.name = name;
-        this.content = content;
-        this.status = status;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.userId = userId;
-    }
 
     public int getId() {
         return id;

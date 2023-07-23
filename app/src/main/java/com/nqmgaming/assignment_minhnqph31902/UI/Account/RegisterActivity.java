@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -63,11 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .transform(new CircleCrop())
                 .into(imgLogoRegister);
 
-        imgBackRegister.setOnClickListener(v -> {
-
-            finish();
-
-        });
+        imgBackRegister.setOnClickListener(v -> finish());
 
         txtLoginRegister.setOnClickListener(v -> {
 
@@ -209,15 +204,11 @@ public class RegisterActivity extends AppCompatActivity {
                         .setAnimation(R.raw.done)
                         .setTitle("Success!")
                         .setDescription("Login successfully!")
-                        .setPositiveButtonText("Ok", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                        .setPositiveButtonText("Ok", v1 -> {
 
-                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                                finish();
+                            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                            finish();
 
-                            }
                         })
                         .hideNegativeButton(true)
                         .show();

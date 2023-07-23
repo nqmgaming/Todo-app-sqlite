@@ -14,9 +14,6 @@ public class DataBaseTodoAppHelper extends SQLiteOpenHelper {
     public static final String TABLE_USER = "user_table";
     public static final String TABLE_TODO = "todo_table";
 
-    //update not null for content and end_date in todo table
-    public static final String UPDATE_TODO_TABLE = "ALTER TABLE " + TABLE_TODO + " ADD COLUMN content TEXT NOT NULL";
-
     //create constructor
     public DataBaseTodoAppHelper(Context context) {
 

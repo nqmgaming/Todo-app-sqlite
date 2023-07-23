@@ -5,7 +5,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import com.nqmgaming.assignment_minhnqph31902.adapter.SlideAdapter;
@@ -22,14 +21,13 @@ public class WelcomeActivity extends AppCompatActivity {
     CircleIndicator dotsLayout;
     Button btnNext, btnSkip;
     SlideAdapter slideAdapter;
-    private UserPreferences userPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //check login
-        userPreferences = new UserPreferences(this);
+        UserPreferences userPreferences = new UserPreferences(this);
 
         //if login, go to MainActivity
         if (userPreferences.isLogin()) {
@@ -51,32 +49,26 @@ public class WelcomeActivity extends AppCompatActivity {
         dotsLayout.setViewPager(viewPager);
 
         //set event click for buttons
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnNext.setOnClickListener(v -> {
 
-                //if click button next, go to next slide
-                if (getItem(0) < slideAdapter.getCount() - 1) {
-                    viewPager.setCurrentItem(getItem(1), true);
-                } else {
+            //if click button next, go to next slide
+            if (getItem(0) < slideAdapter.getCount() - 1) {
+                viewPager.setCurrentItem(getItem(1), true);
+            } else {
 
-                    //if click button next on last slide, go to GetStartActivity
-                    Intent intent = new Intent(WelcomeActivity.this, GetStartActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-        });
-
-        btnSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //if click button skip, go to GetStartActivity
+                //if click button next on last slide, go to GetStartActivity
                 Intent intent = new Intent(WelcomeActivity.this, GetStartActivity.class);
                 startActivity(intent);
                 finish();
             }
+        });
+
+        btnSkip.setOnClickListener(v -> {
+
+            //if click button skip, go to GetStartActivity
+            Intent intent = new Intent(WelcomeActivity.this, GetStartActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         viewPager.addOnPageChangeListener(viewListener);

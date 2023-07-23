@@ -31,7 +31,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     private final Context context;
     private final ArrayList<TodoDTO> doneItemsList;
     private final ArrayList<TodoDTO> notDoneItemsList;
-    private ViewBinder viewBinderDone = new ViewBinder();
+    private final ViewBinder viewBinderDone = new ViewBinder();
 
     public TodoAdapter(Context context, ArrayList<TodoDTO> doneItemsList, ArrayList<TodoDTO> notDoneItemsList) {
         this.context = context;
@@ -67,7 +67,6 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, doneItemsList.size());
 
-                notifyDataSetChanged();
             }
         });
         viewBinderDone.bind(holder.swipeLayout, String.valueOf(todoDTO.getId()));
@@ -86,7 +85,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
             EditText edtDescriptionEdit = view.findViewById(R.id.etDescEdit);
             TextView tvDateEdit = view.findViewById(R.id.tvDateEdit);
             ImageButton btnPickDateEdit = view.findViewById(R.id.btnPickDateEdit);
-            ImageButton btnSendEdit = view.findViewById(R.id.imgSenđEit);
+            ImageButton btnSendEdit = view.findViewById(R.id.imgSendEit);
 
             ViewGroup parent = (ViewGroup) view.getParent();
             if (parent != null) {
@@ -135,22 +134,19 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
             alertDialog.show();
         });
 
-        holder.constraintTodo.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                View view = LayoutInflater.from(context).inflate(R.layout.content, null);
-                TextView tvContent = view.findViewById(R.id.content);
-                ViewGroup parent = (ViewGroup) view.getParent();
-                if (parent != null) {
-                    parent.removeView(view);
-                }
-                tvContent.setText(todoDTO.getContent());
-                builder.setView(view);
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-                return true;
+        holder.constraintTodo.setOnLongClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            View view = LayoutInflater.from(context).inflate(R.layout.content, null);
+            TextView tvContent = view.findViewById(R.id.content);
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null) {
+                parent.removeView(view);
             }
+            tvContent.setText(todoDTO.getContent());
+            builder.setView(view);
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            return true;
         });
     }
 
@@ -193,8 +189,8 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     private void setCompletedAppearance(ViewHolder holder) {
         holder.checkBox.setChecked(true);
         holder.txtNameTodo.setAlpha(0.5f);
-        holder.constraintTodo.setBackgroundColor(context.getResources().getColor(R.color.grayCon));
-        holder.cardViewTodo.setCardBackgroundColor(context.getResources().getColor(R.color.grayCon));
+        holder.constraintTodo.setBackgroundColor(context.getResources().getColor(R.color.grayCon, null));
+        holder.cardViewTodo.setCardBackgroundColor(context.getResources().getColor(R.color.grayCon, null));
         holder.txtNameTodo.setPaintFlags(holder.txtNameTodo.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
         holder.checkBox.setButtonTintList(context.getResources().getColorStateList(R.color.gray, null));
     }
@@ -202,8 +198,8 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     private void setIncompleteAppearance(ViewHolder holder) {
         holder.checkBox.setChecked(false);
         holder.txtNameTodo.setAlpha(1f);
-        holder.constraintTodo.setBackgroundColor(context.getResources().getColor(R.color.white));
-        holder.cardViewTodo.setCardBackgroundColor(context.getResources().getColor(R.color.white));
+        holder.constraintTodo.setBackgroundColor(context.getResources().getColor(R.color.white, null));
+        holder.cardViewTodo.setCardBackgroundColor(context.getResources().getColor(R.color.white, null));
         holder.txtNameTodo.setPaintFlags(holder.txtNameTodo.getPaintFlags() & (~android.graphics.Paint.STRIKE_THRU_TEXT_FLAG));
         holder.checkBox.setButtonTintList(context.getResources().getColorStateList(R.color.black, null));
     }

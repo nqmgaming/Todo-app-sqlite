@@ -74,81 +74,76 @@ public class SetNewPasswordActivity extends AppCompatActivity {
 
         EMail.setText(email);
         //setOnCLickListener for btnSetNewPassword
-        btnSetNewPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnSetNewPassword.setOnClickListener(v -> {
 
-                //get data from edtNewPassword and edtConfirmNewPassword
-                String newPassword = edtNewPassword.getText().toString().trim();
-                String confirmNewPassword = edtConfirmNewPassword.getText().toString().trim();
+            //get data from edtNewPassword and edtConfirmNewPassword
+            String newPassword = edtNewPassword.getText().toString().trim();
+            String confirmNewPassword = edtConfirmNewPassword.getText().toString().trim();
 
-                //check data
-                UserDAO userDAO = new UserDAO(SetNewPasswordActivity.this);
-                //check if newPassword is empty
-                if (newPassword.isEmpty()) {
-                    edtNewPassword.setError("New password is required!");
-                    edtNewPassword.requestFocus();
-                    return;
-                }
+            //check data
+            UserDAO userDAO = new UserDAO(SetNewPasswordActivity.this);
+            //check if newPassword is empty
+            if (newPassword.isEmpty()) {
+                edtNewPassword.setError("New password is required!");
+                edtNewPassword.requestFocus();
+                return;
+            }
 
-                if (confirmNewPassword.isEmpty()) {
-                    edtConfirmNewPassword.setError("Confirm new password is required!");
-                    edtConfirmNewPassword.requestFocus();
-                    return;
-                }
+            if (confirmNewPassword.isEmpty()) {
+                edtConfirmNewPassword.setError("Confirm new password is required!");
+                edtConfirmNewPassword.requestFocus();
+                return;
+            }
 
-                if (!newPassword.equals(confirmNewPassword)) {
-                    edtConfirmNewPassword.setError("Confirm new password does not match!");
-                    edtConfirmNewPassword.requestFocus();
-                    return;
-                }
+            if (!newPassword.equals(confirmNewPassword)) {
+                edtConfirmNewPassword.setError("Confirm new password does not match!");
+                edtConfirmNewPassword.requestFocus();
+                return;
+            }
 
 
-                //check if newPassword is the same as old password
-                if (newPassword.equals(password)) {
-                    edtNewPassword.setError("Please enter a different password!");
-                    edtNewPassword.requestFocus();
-                    return;
-                }
+            //check if newPassword is the same as old password
+            if (newPassword.equals(password)) {
+                edtNewPassword.setError("Please enter a different password!");
+                edtNewPassword.requestFocus();
+                return;
+            }
 
-                //update new password to database
-                //update new password to database
-                int idDTO;
-                try {
-                    idDTO = Integer.parseInt(idDTOString);
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                    // Handle the exception, e.g., show an error message or take appropriate action.
-                    return; // Exit the method since the idDTO is not valid.
-                }
+            //update new password to database
+            //update new password to database
+            int idDTO;
+            try {
+                assert idDTOString != null;
+                idDTO = Integer.parseInt(idDTOString);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                // Handle the exception, e.g., show an error message or take appropriate action.
+                return; // Exit the method since the idDTO is not valid.
+            }
 
-                UserDTO userDTO = new UserDTO(idDTO, username, email, newPassword, firstName, lastName);
+            UserDTO userDTO = new UserDTO(idDTO, username, email, newPassword, firstName, lastName);
 
-                //check if update successfully
-                int result = userDAO.updateUser(userDTO);
-                if (result > 0) {
-                    new CuteDialog.withAnimation(SetNewPasswordActivity.this)
-                            .setAnimation(R.raw.done)
-                            .setTitle("Success!")
-                            .setDescription("Your password has been reset successfully!")
-                            .setPositiveButtonText("Ok", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
+            //check if update successfully
+            int result = userDAO.updateUser(userDTO);
+            if (result > 0) {
+                new CuteDialog.withAnimation(SetNewPasswordActivity.this)
+                        .setAnimation(R.raw.done)
+                        .setTitle("Success!")
+                        .setDescription("Your password has been reset successfully!")
+                        .setPositiveButtonText("Ok", v1 -> {
 
-                                    Intent intent = new Intent(SetNewPasswordActivity.this, LoginActivity.class);
-                                    intent.putExtra("emailDTO", email);
-                                    intent.putExtra("passwordDTO", newPassword);
-                                    intent.putExtra("ok", "ok");
-                                    startActivity(intent);
+                            Intent intent1 = new Intent(SetNewPasswordActivity.this, LoginActivity.class);
+                            intent1.putExtra("emailDTO", email);
+                            intent1.putExtra("passwordDTO", newPassword);
+                            intent1.putExtra("ok", "ok");
+                            startActivity(intent1);
 
-                                }
-                            })
-                            .hideNegativeButton(true)
-                            .show();
+                        })
+                        .hideNegativeButton(true)
+                        .show();
 
-                } else {
-                    Toast.makeText(SetNewPasswordActivity.this, "Reset password failed!" + result, Toast.LENGTH_SHORT).show();
-                }
+            } else {
+                Toast.makeText(SetNewPasswordActivity.this, "Reset password failed!" + result, Toast.LENGTH_SHORT).show();
             }
         });
 

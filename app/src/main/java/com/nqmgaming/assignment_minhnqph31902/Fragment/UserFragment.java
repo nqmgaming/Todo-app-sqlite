@@ -23,6 +23,8 @@ import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 
 import com.nqmgaming.assignment_minhnqph31902.UI.Intro.GetStartActivity;
 
+
+
 import io.github.cutelibs.cutedialog.CuteDialog;
 
 
@@ -62,30 +64,19 @@ public class UserFragment extends Fragment {
             // Handle the case when userDTO is null
             tvName.setText("Unknown User");
         }
-        tvSignOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new CuteDialog.withAnimation(getContext())
-                        .setTitle("Sign out")
-                        .setDescription("Are you sure you want to sign out?")
-                        .setNegativeButtonText("No", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+        tvSignOut.setOnClickListener(v -> new CuteDialog.withAnimation(getContext())
+                .setTitle("Sign out")
+                .setDescription("Are you sure you want to sign out?")
+                .setNegativeButtonText("No", v1 -> {
 
-                            }
-                        }).setPositiveButtonText("Yes", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                preferences = new UserPreferences(getContext());
-                                preferences.logout();
-                                Intent intent = new Intent(getContext(), GetStartActivity.class);
-                                startActivity(intent);
-                                getActivity().finish();
-                            }
-                        })
-                        .show();
-            }
-        });
+                }).setPositiveButtonText("Yes", v12 -> {
+                    preferences = new UserPreferences(requireContext());
+                    preferences.logout();
+                    Intent intent = new Intent(getContext(), GetStartActivity.class);
+                    startActivity(intent);
+                    requireActivity().finish();
+                })
+                .show());
 
     }
 }

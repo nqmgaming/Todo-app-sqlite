@@ -18,14 +18,13 @@ public class GetStartActivity extends AppCompatActivity {
     //declare variables
     Button btnLogin, btnRegister;
     CheckBox cbAgree;
-    private UserPreferences userPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //check login state
-        userPreferences = new UserPreferences(this);
+        UserPreferences userPreferences = new UserPreferences(this);
 
         //if login, go to MainActivity
         if (userPreferences.isLogin()) {

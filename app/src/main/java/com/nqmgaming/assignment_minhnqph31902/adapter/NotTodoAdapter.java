@@ -34,7 +34,7 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
     private final ArrayList<TodoDTO> notDoneItemsList;
     private final ArrayList<TodoDTO> doneItemsList;
 
-    private ViewBinder viewBinderNotDone = new ViewBinder();
+    private final ViewBinder viewBinderNotDone = new ViewBinder();
 
 
     public NotTodoAdapter(Context context, ArrayList<TodoDTO> notDoneItemsList, ArrayList<TodoDTO> doneItemsList) {
@@ -97,7 +97,7 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
             EditText edtDescriptionEdit = view.findViewById(R.id.etDescEdit);
             TextView tvDateEdit = view.findViewById(R.id.tvDateEdit);
             ImageButton btnPickDateEdit = view.findViewById(R.id.btnPickDateEdit);
-            ImageButton btnSendEdit = view.findViewById(R.id.imgSenđEit);
+            ImageButton btnSendEdit = view.findViewById(R.id.imgSendEit);
 
             ViewGroup parent = (ViewGroup) view.getParent();
             if (parent != null) {
@@ -136,7 +136,6 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
                     TodoDAO todoDAO = new TodoDAO(context);
                     int status = todoDAO.updateTodo(todoDTO);
                     if (status > 0) {
-                        notifyDataSetChanged();
                         alertDialog.dismiss();
                     }
                 }
@@ -144,22 +143,19 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
             alertDialog.show();
         });
 
-        holder.constraintNotTodo.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                View view = LayoutInflater.from(context).inflate(R.layout.content, null);
-                TextView tvContent = view.findViewById(R.id.content);
-                ViewGroup parent = (ViewGroup) view.getParent();
-                if (parent != null) {
-                    parent.removeView(view);
-                }
-                tvContent.setText(todoDTO.getContent());
-                builder.setView(view);
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-                return true;
+        holder.constraintNotTodo.setOnLongClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            View view = LayoutInflater.from(context).inflate(R.layout.content, null);
+            TextView tvContent = view.findViewById(R.id.content);
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null) {
+                parent.removeView(view);
             }
+            tvContent.setText(todoDTO.getContent());
+            builder.setView(view);
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            return true;
         });
     }
 
@@ -204,8 +200,8 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
     private void setCompletedAppearance(NotTodoAdapter.ViewHolder holder) {
         holder.uncheckBox.setChecked(true);
         holder.txtNameNotTodo.setAlpha(0.5f);
-        holder.constraintNotTodo.setBackgroundColor(context.getResources().getColor(R.color.gray));
-        holder.cardViewMotTodo.setCardBackgroundColor(context.getResources().getColor(R.color.gray));
+        holder.constraintNotTodo.setBackgroundColor(context.getResources().getColor(R.color.gray, null));
+        holder.cardViewMotTodo.setCardBackgroundColor(context.getResources().getColor(R.color.gray, null));
         holder.txtNameNotTodo.setPaintFlags(holder.txtNameNotTodo.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
         holder.uncheckBox.setButtonTintList(context.getResources().getColorStateList(R.color.black, null));
     }
@@ -213,8 +209,8 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
     private void setIncompleteAppearance(NotTodoAdapter.ViewHolder holder) {
         holder.uncheckBox.setChecked(false);
         holder.txtNameNotTodo.setAlpha(1f);
-        holder.constraintNotTodo.setBackgroundColor(context.getResources().getColor(R.color.white));
-        holder.cardViewMotTodo.setCardBackgroundColor(context.getResources().getColor(R.color.white));
+        holder.constraintNotTodo.setBackgroundColor(context.getResources().getColor(R.color.white, null));
+        holder.cardViewMotTodo.setCardBackgroundColor(context.getResources().getColor(R.color.white, null));
         holder.txtNameNotTodo.setPaintFlags(holder.txtNameNotTodo.getPaintFlags() & (~android.graphics.Paint.STRIKE_THRU_TEXT_FLAG));
         holder.uncheckBox.setButtonTintList(context.getResources().getColorStateList(R.color.black, null));
     }

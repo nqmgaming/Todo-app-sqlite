@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -81,20 +80,16 @@ public class LoginActivity extends AppCompatActivity {
                 .transform(new CircleCrop())
                 .into(imgLogo);
 
-        //set event click for buttons and textviews
+        //set event click for buttons and textview
         Intent intent = getIntent();
         String emailAccount = intent.getStringExtra("emailDTO");
         String passwordAccount = intent.getStringExtra("passwordDTO");
 
         if (emailAccount != null && passwordAccount != null) {
             // Check if emailAccount and passwordAccount are not null before setting the text
-            if (emailAccount != null) {
-                edtEmail.setText(emailAccount);
-            }
+            edtEmail.setText(emailAccount);
 
-            if (passwordAccount != null) {
-                edtPassword.setText(passwordAccount);
-            }
+            edtPassword.setText(passwordAccount);
         }
 
 
@@ -108,9 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         //set event click for txtForgotPassword
-        txtForgotPassword.setOnClickListener(v -> {
-            startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
-        });
+        txtForgotPassword.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class)));
 
         //set event click for btnBack
         btnBack.setOnClickListener(v -> {
@@ -168,20 +161,28 @@ public class LoginActivity extends AppCompatActivity {
                 if (cbRemember.isChecked()) {
                     userPreferences.setLogin(true);
                     userPreferences.setIdUser(userDAO.getIdByEmail(email));
-                }
-                new CuteDialog.withAnimation(LoginActivity.this)
-                        .setAnimation(R.raw.done)
-                        .setTitle("Success!")
-                        .setDescription("Login successfully!")
-                        .setPositiveButtonText("Ok", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                    new CuteDialog.withAnimation(LoginActivity.this)
+                            .setAnimation(R.raw.done)
+                            .setTitle("Success!")
+                            .setDescription("Login successfully!")
+                            .setPositiveButtonText("Ok", v1 -> {
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 finish();
-                            }
-                        })
-                        .hideNegativeButton(true)
-                        .show();
+                            })
+                            .hideNegativeButton(true)
+                            .show();
+                } else {
+                    new CuteDialog.withAnimation(LoginActivity.this)
+                            .setAnimation(R.raw.done)
+                            .setTitle("Success!")
+                            .setDescription("Login successfully!")
+                            .setPositiveButtonText("Ok", v12 -> {
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                finish();
+                            })
+                            .hideNegativeButton(true)
+                            .show();
+                }
 
                 //go to MainActivity
 

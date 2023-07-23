@@ -38,7 +38,7 @@ public class SlideAdapter extends PagerAdapter {
     };
 
     //Create 3 string short des for todo app
-    public String[] slide_descs = {
+    public String[] slide_desc = {
             "This is a simple todo app",
             "Increase your work productivity",
             "App is very easy to use"
@@ -53,7 +53,7 @@ public class SlideAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return view == (LinearLayout) object;
+        return view == object;
     }
 
     @NonNull
@@ -61,7 +61,8 @@ public class SlideAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
 
         //create layout inflater
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater layoutInflater;
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.slide_layout, container, false);
 
         //mapping variables with view
@@ -72,7 +73,7 @@ public class SlideAdapter extends PagerAdapter {
         //set image, title, description for each slide
         slideImageView.setAnimation(slide_images[position]);
         txtTitle.setText(slide_headings[position]);
-        txtDescription.setText(slide_descs[position]);
+        txtDescription.setText(slide_desc[position]);
 
         //add view to container
         container.addView(view);

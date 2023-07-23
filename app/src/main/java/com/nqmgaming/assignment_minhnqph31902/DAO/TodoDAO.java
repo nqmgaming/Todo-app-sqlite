@@ -158,6 +158,8 @@ public class TodoDAO {
             }
 
         }
+        assert cursor != null;
+        cursor.close();
 
         //return array list
         return todoDTOArrayList;
@@ -286,6 +288,9 @@ public class TodoDAO {
                 } while (cursor.moveToNext());
 
             }
+
+            cursor.close();
+
 
         }
 

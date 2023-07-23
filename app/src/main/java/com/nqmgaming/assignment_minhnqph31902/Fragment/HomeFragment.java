@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,13 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
@@ -29,11 +26,9 @@ import com.nqmgaming.assignment_minhnqph31902.DTO.TodoDTO;
 import com.nqmgaming.assignment_minhnqph31902.adapter.NotTodoAdapter;
 import com.nqmgaming.assignment_minhnqph31902.adapter.TodoAdapter;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
-import java.util.zip.DataFormatException;
 
 import io.github.cutelibs.cutedialog.CuteDialog;
 
@@ -72,7 +67,7 @@ public class HomeFragment extends Fragment {
             try {
 
                 //Get id user from shared preferences
-                userPreferences = new UserPreferences(getContext());
+                userPreferences = new UserPreferences(requireContext());
                 int idUser = userPreferences.getIdUser();
 
                 todoDAO = new TodoDAO(getContext());
@@ -112,7 +107,6 @@ public class HomeFragment extends Fragment {
                         }
                     }
                 } else {
-                    // Tạo các danh sách doneItemsList và notDoneItemsList
                     for (TodoDTO todo : todoDTOArrayList) {
                         if (todo.getStatus() == 1) {
                             doneItemsList.add(todo);
@@ -141,214 +135,175 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
-            fabAddTodo.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
+            fabAddTodo.setOnLongClickListener(v -> {
 
-                    toggleSubMenu();
-                    return true;
-                }
+                toggleSubMenu();
+                return true;
             });
-            fabAddTodo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Build a custom dialog
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    View view = getLayoutInflater().inflate(R.layout.add_todo, null);
+            fabAddTodo.setOnClickListener(v -> {
+                //Build a custom dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                View view1 = getLayoutInflater().inflate(R.layout.add_todo, null);
 
-                    EditText edtTitle = view.findViewById(R.id.etTodo);
-                    EditText edtContent = view.findViewById(R.id.etDesc);
-                    TextView tvDate = view.findViewById(R.id.txtDate);
-                    ImageButton imgSendAdd = view.findViewById(R.id.imgSendAdd);
-                    ImageButton imgCalendar = view.findViewById(R.id.calendarAdd);
+                EditText edtTitle = view1.findViewById(R.id.etTodo);
+                EditText edtContent = view1.findViewById(R.id.etDesc);
+                TextView tvDate = view1.findViewById(R.id.txtDate);
+                ImageButton imgSendAdd = view1.findViewById(R.id.imgSendAdd);
+                ImageButton imgCalendar = view1.findViewById(R.id.calendarAdd);
 
-                    ViewGroup parent = (ViewGroup) view.getParent();
-                    if (parent != null) {
-                        parent.removeView(view);
-                    }
-                    builder.setView(view);
-                    final AlertDialog alertDialog = builder.create();
-                    //get date from system
-                    String startDate = java.text.DateFormat.getDateTimeInstance().format(new java.util.Date());
-
-                    imgCalendar.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            try {
-                                // Date picker
-                                Calendar calendar = Calendar.getInstance();
-                                int year = calendar.get(Calendar.YEAR);
-                                int month = calendar.get(Calendar.MONTH);
-                                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-
-                                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), (view, year1, month1, dayOfMonth1) -> {
-                                    String endDate = dayOfMonth1 + "/" + (month1 + 1) + "/" + year1;
-                                    tvDate.setText(endDate);
-                                    //get date from system
-                                }, year, month, dayOfMonth);
-                                datePickerDialog.show();
-
-                            } catch (Exception e) {
-                                Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-
-
-                    imgSendAdd.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            String title = edtTitle.getText().toString().trim();
-                            String content = edtContent.getText().toString().trim();
-                            String endDate = tvDate.getText().toString().trim();
-                            userPreferences = new UserPreferences(getContext());
-                            int idUser = userPreferences.getIdUser();
-                            //random id bằng cách lấy id người dùng + 2004 + id lần cuối cùng
-                            int id;
-                            if (todoDTOArrayList.isEmpty()) {
-                                //random id bằng cách lấy giây hiện tại
-                                id = idUser + 2004 + (int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-                            } else {
-                                // Access the last element of todoDTOArrayList
-                                id = idUser + 2004 + todoDTOArrayList.get(todoDTOArrayList.size() - 1).getId();
-                            }
-
-                            if (title.isEmpty() || content.isEmpty()) {
-                                Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
-                            } else {
-                                try {
-                                    TodoDTO todoDTO = new TodoDTO();
-                                    todoDTO.setId(id);
-                                    todoDTO.setName(title);
-                                    todoDTO.setContent(content);
-                                    todoDTO.setStatus(1);
-                                    todoDTO.setStartDate(startDate);
-                                    todoDTO.setEndDate(endDate);
-                                    todoDTO.setUserId(userPreferences.getIdUser());
-                                    long status = todoDAO.insertTodo(todoDTO);
-                                    if (status > 0) {
-                                        Toast.makeText(getContext(), "Add todo success", Toast.LENGTH_SHORT).show();
-                                        todoDTOArrayList = todoDAO.getAllTodo();
-                                        notDoneItemsList.clear();
-                                        doneItemsList.clear();
-                                        for (TodoDTO todo : todoDTOArrayList) {
-                                            if (todo.getStatus() == 1) {
-                                                doneItemsList.add(todo);
-                                            } else {
-                                                notDoneItemsList.add(todo);
-                                            }
-                                        }
-                                        notTodoAdapter.notifyDataSetChanged();
-                                        todoAdapter.notifyDataSetChanged();
-                                        // Cập nhật adapter và hiển thị animation Lottie nếu danh sách rỗng
-                                        notTodoAdapter.notifyDataSetChanged();
-                                        todoAdapter.notifyDataSetChanged();
-
-                                        // Dismiss dialog
-                                        alertDialog.dismiss();
-
-                                    } else {
-                                        Toast.makeText(getContext(), "Add todo fail", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                } catch (Exception e) {
-                                    Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-
-                            }
-
-                        }
-                    });
-                    alertDialog.show();
-
+                ViewGroup parent = (ViewGroup) view1.getParent();
+                if (parent != null) {
+                    parent.removeView(view1);
                 }
+                builder.setView(view1);
+                final AlertDialog alertDialog = builder.create();
+                //get date from system
+                String startDate = java.text.DateFormat.getDateTimeInstance().format(new java.util.Date());
+
+                imgCalendar.setOnClickListener(v12 -> {
+                    try {
+                        // Date picker
+                        Calendar calendar = Calendar.getInstance();
+                        int year = calendar.get(Calendar.YEAR);
+                        int month = calendar.get(Calendar.MONTH);
+                        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), (view11, year1, month1, dayOfMonth1) -> {
+                            String endDate = dayOfMonth1 + "/" + (month1 + 1) + "/" + year1;
+                            tvDate.setText(endDate);
+                            //get date from system
+                        }, year, month, dayOfMonth);
+                        datePickerDialog.show();
+
+                    } catch (Exception e) {
+                        Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+                imgSendAdd.setOnClickListener(v1 -> {
+
+                    String title = edtTitle.getText().toString().trim();
+                    String content = edtContent.getText().toString().trim();
+                    String endDate = tvDate.getText().toString().trim();
+                    userPreferences = new UserPreferences(requireContext());
+                    int idUser = userPreferences.getIdUser();
+                    int id;
+                    if (todoDTOArrayList.isEmpty()) {
+                        id = idUser + 2004 + (int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+                    } else {
+                        // Access the last element of todoDTOArrayList
+                        id = idUser + 2004 + todoDTOArrayList.get(todoDTOArrayList.size() - 1).getId();
+                    }
+
+                    if (title.isEmpty() || content.isEmpty()) {
+                        Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    } else {
+                        try {
+                            TodoDTO todoDTO = new TodoDTO();
+                            todoDTO.setId(id);
+                            todoDTO.setName(title);
+                            todoDTO.setContent(content);
+                            todoDTO.setStatus(1);
+                            todoDTO.setStartDate(startDate);
+                            todoDTO.setEndDate(endDate);
+                            todoDTO.setUserId(userPreferences.getIdUser());
+                            long status = todoDAO.insertTodo(todoDTO);
+                            if (status > 0) {
+                                Toast.makeText(getContext(), "Add todo success", Toast.LENGTH_SHORT).show();
+                                todoDTOArrayList = todoDAO.getAllTodo();
+                                notDoneItemsList.clear();
+                                doneItemsList.clear();
+                                for (TodoDTO todo : todoDTOArrayList) {
+                                    if (todo.getStatus() == 1) {
+                                        doneItemsList.add(todo);
+                                    } else {
+                                        notDoneItemsList.add(todo);
+                                    }
+                                }
+                                notTodoAdapter.notifyDataSetChanged();
+                                todoAdapter.notifyDataSetChanged();
+                                notTodoAdapter.notifyDataSetChanged();
+                                todoAdapter.notifyDataSetChanged();
+
+                                // Dismiss dialog
+                                alertDialog.dismiss();
+
+                            } else {
+                                Toast.makeText(getContext(), "Add todo fail", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (Exception e) {
+                            Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                });
+                alertDialog.show();
+
             });
         } catch (Exception e) {
             Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        fabDeleteAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TodoDAO todoDAO = new TodoDAO(getContext());
-                new CuteDialog.withAnimation(getContext())
-                        .setTitle("Delete all?")
-                        .setPositiveButtonText("Yes", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                try {
-                                    todoDAO.deleteAllTodo();
-                                    Toast.makeText(getContext(), "Delete all success", Toast.LENGTH_SHORT).show();
-                                    todoDTOArrayList = todoDAO.getAllTodo();
-                                    notDoneItemsList.clear();
-                                    doneItemsList.clear();
-                                    for (TodoDTO todo : todoDTOArrayList) {
-                                        if (todo.getStatus() == 1) {
-                                            doneItemsList.add(todo);
-                                        } else {
-                                            notDoneItemsList.add(todo);
-                                        }
-                                    }
-                                    notTodoAdapter.notifyDataSetChanged();
-                                    todoAdapter.notifyDataSetChanged();
-                                    // Cập nhật adapter và hiển thị animation Lottie nếu danh sách rỗng
-                                    notTodoAdapter.notifyDataSetChanged();
-                                    todoAdapter.notifyDataSetChanged();
-                                } catch (Exception e) {
-                                    Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        fabDeleteAll.setOnClickListener(v -> {
+            TodoDAO todoDAO = new TodoDAO(getContext());
+            new CuteDialog.withAnimation(getContext())
+                    .setTitle("Delete all?")
+                    .setPositiveButtonText("Yes", v13 -> {
+                        try {
+                            todoDAO.deleteAllTodo();
+                            Toast.makeText(getContext(), "Delete all success", Toast.LENGTH_SHORT).show();
+                            todoDTOArrayList = todoDAO.getAllTodo();
+                            notDoneItemsList.clear();
+                            doneItemsList.clear();
+                            for (TodoDTO todo : todoDTOArrayList) {
+                                if (todo.getStatus() == 1) {
+                                    doneItemsList.add(todo);
+                                } else {
+                                    notDoneItemsList.add(todo);
                                 }
                             }
-                        })
-                        .setNegativeButtonText("No", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(getContext(), "Cancel", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .show();
-            }
+                            notTodoAdapter.notifyDataSetChanged();
+                            todoAdapter.notifyDataSetChanged();
+                            notTodoAdapter.notifyDataSetChanged();
+                            todoAdapter.notifyDataSetChanged();
+                        } catch (Exception e) {
+                            Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButtonText("No", v14 -> Toast.makeText(getContext(), "Cancel", Toast.LENGTH_SHORT).show())
+                    .show();
         });
 
-        fabDoneAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TodoDAO todoDAO = new TodoDAO(getContext());
-                new CuteDialog.withAnimation(getContext())
-                        .setTitle("Done all?")
-                        .setPositiveButtonText("Yes", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                try {
-                                    todoDAO.doneAllTodo();
-                                    Toast.makeText(getContext(), "Done all success", Toast.LENGTH_SHORT).show();
-                                    todoDTOArrayList = todoDAO.getAllTodo();
-                                    notDoneItemsList.clear();
-                                    doneItemsList.clear();
-                                    for (TodoDTO todo : todoDTOArrayList) {
-                                        if (todo.getStatus() == 1) {
-                                            doneItemsList.add(todo);
-                                        } else {
-                                            notDoneItemsList.add(todo);
-                                        }
-                                    }
-                                    notTodoAdapter.notifyDataSetChanged();
-                                    todoAdapter.notifyDataSetChanged();
-                                    // Cập nhật adapter và hiển thị animation Lottie nếu danh sách rỗng
-                                    notTodoAdapter.notifyDataSetChanged();
-                                    todoAdapter.notifyDataSetChanged();
-                                } catch (Exception e) {
-                                    Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        fabDoneAll.setOnClickListener(v -> {
+            TodoDAO todoDAO = new TodoDAO(getContext());
+            new CuteDialog.withAnimation(getContext())
+                    .setTitle("Done all?")
+                    .setPositiveButtonText("Yes", v15 -> {
+                        try {
+                            todoDAO.doneAllTodo();
+                            Toast.makeText(getContext(), "Done all success", Toast.LENGTH_SHORT).show();
+                            todoDTOArrayList = todoDAO.getAllTodo();
+                            notDoneItemsList.clear();
+                            doneItemsList.clear();
+                            for (TodoDTO todo : todoDTOArrayList) {
+                                if (todo.getStatus() == 1) {
+                                    doneItemsList.add(todo);
+                                } else {
+                                    notDoneItemsList.add(todo);
                                 }
                             }
-                        })
-                        .setNegativeButtonText("No", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(getContext(), "Cancel", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .show();
-            }
+                            notTodoAdapter.notifyDataSetChanged();
+                            todoAdapter.notifyDataSetChanged();
+                            notTodoAdapter.notifyDataSetChanged();
+                            todoAdapter.notifyDataSetChanged();
+                        } catch (Exception e) {
+                            Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButtonText("No", v16 -> Toast.makeText(getContext(), "Cancel", Toast.LENGTH_SHORT).show())
+                    .show();
         });
 
     }

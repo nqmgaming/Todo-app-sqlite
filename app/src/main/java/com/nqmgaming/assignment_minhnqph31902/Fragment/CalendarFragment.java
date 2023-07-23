@@ -2,7 +2,6 @@ package com.nqmgaming.assignment_minhnqph31902.Fragment;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -23,8 +22,6 @@ import com.nqmgaming.assignment_minhnqph31902.DAO.TodoDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.TodoDTO;
 import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
-import com.nqmgaming.assignment_minhnqph31902.adapter.TodoAdapter;
-
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
@@ -50,15 +47,12 @@ public class CalendarFragment extends Fragment {
         selectedDateTextView.setText(getFormattedDate(year, month, dayOfMonth));
 
         // Set an OnDateChangedListener to handle date selection
-        datePicker.init(year, month, dayOfMonth, new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                // Display the selected date in the TextView
-                selectedDateTextView.setText(getFormattedDate(year, monthOfYear, dayOfMonth));
+        datePicker.init(year, month, dayOfMonth, (view, year1, monthOfYear, dayOfMonth1) -> {
+            // Display the selected date in the TextView
+            selectedDateTextView.setText(getFormattedDate(year1, monthOfYear, dayOfMonth1));
 
-                // Show an alert with the selected date
-                showDateAlert(year, monthOfYear, dayOfMonth);
-            }
+            // Show an alert with the selected date
+            showDateAlert(year1, monthOfYear, dayOfMonth1);
         });
 
         return rootView;
@@ -89,69 +83,62 @@ public class CalendarFragment extends Fragment {
         tvDate.setText(getFormattedDate(year, month, dayOfMonth));
         alertDialog.setView(dialogView);
 
-        imgCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    // Date picker
-                    Calendar calendar = Calendar.getInstance();
-                    int year = calendar.get(Calendar.YEAR);
-                    int month = calendar.get(Calendar.MONTH);
-                    int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        imgCalendar.setOnClickListener(v -> {
+            try {
+                // Date picker
+                Calendar calendar = Calendar.getInstance();
+                int year12 = calendar.get(Calendar.YEAR);
+                int month12 = calendar.get(Calendar.MONTH);
+                int dayOfMonth12 = calendar.get(Calendar.DAY_OF_MONTH);
 
-                    DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), (view, year1, month1, dayOfMonth1) -> {
-                        String endDate = dayOfMonth1 + "/" + (month1 + 1) + "/" + year1;
-                        tvDate.setText(endDate);
-                        //get date from system
-                    }, year, month, dayOfMonth);
-                    datePickerDialog.show();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), (view, year1, month1, dayOfMonth1) -> {
+                    String endDate = dayOfMonth1 + "/" + (month1 + 1) + "/" + year1;
+                    tvDate.setText(endDate);
+                    //get date from system
+                }, year12, month12, dayOfMonth12);
+                datePickerDialog.show();
 
-                } catch (Exception e) {
-                    Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
         //get id from shared preferences
-        imgSendAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UserPreferences userPreferences = new UserPreferences(getContext());
-                int id = userPreferences.getIdUser();
-                //random id todo bằng id user + 2004 + số ngẫu nhiên
-                int idTodo = id + 2004 + (int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) % 1000000;
-                String title = edtTitle.getText().toString();
-                String content = edtContent.getText().toString();
+        imgSendAdd.setOnClickListener(v -> {
+            UserPreferences userPreferences = new UserPreferences(requireContext());
+            int id = userPreferences.getIdUser();
+            int idTodo = id + 2004 + (int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) % 1000000;
+            String title = edtTitle.getText().toString();
+            String content = edtContent.getText().toString();
 
-                //validate
-                if (TextUtils.isEmpty(title)) {
-                    edtTitle.setError("Please enter title");
-                    return;
-                }
-                if (TextUtils.isEmpty(content)) {
-                    edtContent.setError("Please enter content");
-                    return;
-                }
+            //validate
+            if (TextUtils.isEmpty(title)) {
+                edtTitle.setError("Please enter title");
+                return;
+            }
+            if (TextUtils.isEmpty(content)) {
+                edtContent.setError("Please enter content");
+                return;
+            }
 
-                TodoDTO todoDTO = new TodoDTO();
-                todoDTO.setUserId(id);
-                todoDTO.setName(title);
-                todoDTO.setContent(content);
-                todoDTO.setEndDate(tvDate.getText().toString());
-                todoDTO.setStartDate(tvDate.getText().toString());
-                todoDTO.setId(idTodo);
-                todoDTO.setStatus(1);
-                TodoDAO todoDAO = new TodoDAO(getContext());
-                long result = todoDAO.insertTodo(todoDTO);
-                if (result > 0) {
-                    Toast.makeText(getContext(), "Add success", Toast.LENGTH_SHORT).show();
-                    //Intent to home
-                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-                    alertDialog.dismiss();
-                } else {
-                    Toast.makeText(getContext(), "Add failed", Toast.LENGTH_SHORT).show();
-                }
+            TodoDTO todoDTO = new TodoDTO();
+            todoDTO.setUserId(id);
+            todoDTO.setName(title);
+            todoDTO.setContent(content);
+            todoDTO.setEndDate(tvDate.getText().toString());
+            todoDTO.setStartDate(tvDate.getText().toString());
+            todoDTO.setId(idTodo);
+            todoDTO.setStatus(1);
+            TodoDAO todoDAO = new TodoDAO(getContext());
+            long result = todoDAO.insertTodo(todoDTO);
+            if (result > 0) {
+                Toast.makeText(getContext(), "Add success", Toast.LENGTH_SHORT).show();
+                //Intent to home
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+                alertDialog.dismiss();
+            } else {
+                Toast.makeText(getContext(), "Add failed", Toast.LENGTH_SHORT).show();
             }
         });
 
