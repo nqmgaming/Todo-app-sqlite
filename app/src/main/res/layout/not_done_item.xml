@@ -72,13 +72,21 @@
                 android:id="@+id/tvNameNotTodo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+
                 android:text="hello"
                 android:textColor="#000000"
-                android:textSize="18dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/uncheckbox"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="15dp"
+                app:layout_constraintStart_toEndOf="@+id/uncheckbox"
+                app:layout_constraintTop_toTopOf="@+id/uncheckbox" />
+            <TextView
+                android:id="@+id/txtDateNotDone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date"
+                android:textColor="#828080"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/uncheckbox"
+                app:layout_constraintStart_toEndOf="@+id/uncheckbox" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.apachat.swipereveallayout.core.SwipeLayout>
 </androidx.cardview.widget.CardView>

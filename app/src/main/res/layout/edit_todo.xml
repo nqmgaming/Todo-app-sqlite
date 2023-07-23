@@ -13,7 +13,7 @@
         android:padding="5dp">
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/imgAdd"
+            android:id="@+id/imgEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -25,20 +25,20 @@
             app:lottie_rawRes="@raw/check_add" />
 
         <EditText
-            android:id="@+id/etTodo"
+            android:id="@+id/etTodoEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:hint="What do you want to do?"
-            app:layout_constraintTop_toBottomOf="@id/imgAdd" />
+            app:layout_constraintTop_toBottomOf="@id/imgEdit" />
 
         <EditText
-            android:id="@+id/etDesc"
+            android:id="@+id/etDescEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:hint="Description..."
-            app:layout_constraintTop_toBottomOf="@id/etTodo" />
+            app:layout_constraintTop_toBottomOf="@id/etTodoEdit" />
 
 
         <LinearLayout
@@ -49,37 +49,37 @@
             android:orientation="horizontal"
             android:padding="5dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etDesc">
+            app:layout_constraintTop_toBottomOf="@id/etDescEdit">
 
             <ImageButton
-                android:id="@+id/calendarAdd"
+                android:id="@+id/btnPickDateEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FFFFFF"
                 android:src="@drawable/calen" />
 
             <TextView
-                android:id="@+id/txtDate"
+                android:id="@+id/tvDateEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center" />
 
             <ImageButton
-                android:id="@+id/flggAdd"
+                android:id="@+id/flggEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FFFFFF"
                 android:src="@drawable/flag" />
 
             <ImageButton
-                android:id="@+id/tagAdd"
+                android:id="@+id/tagEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FFFFFF"
                 android:src="@drawable/tag" />
 
             <ImageButton
-                android:id="@+id/CategotyAdd"
+                android:id="@+id/CategotyEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FFFFFF"
@@ -89,14 +89,15 @@
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/imgSendAdd"
+            android:id="@+id/imgSenđEit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:backgroundTint="#FFFFFF"
             android:src="@drawable/send"
-            app:layout_constraintEnd_toEndOf="@+id/etDesc"
-            app:layout_constraintTop_toBottomOf="@id/etDesc" />
+            app:layout_constraintEnd_toEndOf="@+id/etDescEdit"
+            app:layout_constraintTop_toBottomOf="@id/etDescEdit" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

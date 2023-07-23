@@ -86,7 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:padding="10dp"
-                    android:text="Not Todo"
+                    android:text="Done"
                     android:textColor="#000000"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -117,6 +117,25 @@
             android:layout_marginBottom="16dp"
             android:src="@drawable/add"
             app:backgroundTint="#FFF24235" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabDeleteAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="16dp"
+            android:layout_above="@id/fabAddTodo"
+            android:src="@drawable/delete"
+            android:visibility="gone" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/doneAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="16dp"
+            android:layout_above="@id/fabDeleteAll"
+            android:src="@drawable/check"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

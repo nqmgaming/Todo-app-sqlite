@@ -191,4 +191,105 @@ public class TodoDAO {
         //return result
         return result;
     }
+
+    //delete all todo return int
+    public int deleteAllTodo() {
+
+        //create result variable
+        int result = -1;
+
+        //try catch
+        try {
+
+            //delete data from database
+            result = sqLiteDatabase.delete("todo_table", null, null);
+
+        } catch (SQLException e) {
+
+            //print error
+            e.printStackTrace();
+
+        }
+
+        //return result
+        return result;
+    }
+
+    //Done all set status todo equal 1 return int
+    public int doneAllTodo() {
+
+        //create result variable
+        int result = -1;
+
+        //create content values
+        ContentValues contentValues = new ContentValues();
+
+        //put data to content values
+        contentValues.put("status", 0);
+
+        //try catch
+        try {
+
+            //update data to database
+            result = sqLiteDatabase.update("todo_table", contentValues, null, null);
+
+        } catch (SQLException e) {
+
+            //print error
+            e.printStackTrace();
+
+        }
+
+        //return result
+        return result;
+    }
+
+    //get all todo by user id return array list
+    public ArrayList<TodoDTO> getAllTodoByUserId(int userId) {
+
+        //create array list
+        ArrayList<TodoDTO> todoDTOArrayList = new ArrayList<>();
+
+        //create query string
+        String query = "SELECT * FROM todo_table WHERE user_id = " + userId;
+
+        //create cursor
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+
+        //check cursor
+        if (cursor != null) {
+
+            //check cursor count
+            if (cursor.getCount() > 0) {
+
+                //move to first
+                cursor.moveToFirst();
+
+                //loop
+                do {
+
+                    //create todo dto
+                    TodoDTO todoDTO = new TodoDTO();
+
+                    //set data to todo dto
+                    todoDTO.setId(cursor.getInt(0));
+                    todoDTO.setName(cursor.getString(1));
+                    todoDTO.setContent(cursor.getString(2));
+                    todoDTO.setStatus(cursor.getInt(3));
+                    todoDTO.setStartDate(cursor.getString(4));
+                    todoDTO.setEndDate(cursor.getString(5));
+                    todoDTO.setUserId(cursor.getInt(6));
+
+                    //add todo dto to array list
+                    todoDTOArrayList.add(todoDTO);
+
+                } while (cursor.moveToNext());
+
+            }
+
+        }
+
+        //return array list
+        return todoDTOArrayList;
+    }
 }
