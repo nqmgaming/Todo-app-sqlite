@@ -136,6 +136,7 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
                     TodoDAO todoDAO = new TodoDAO(context);
                     int status = todoDAO.updateTodo(todoDTO);
                     if (status > 0) {
+                        notifyItemRangeChanged(position, notDoneItemsList.size());
                         alertDialog.dismiss();
                     }
                 }
