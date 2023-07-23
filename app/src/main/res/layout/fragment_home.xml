@@ -12,18 +12,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/flower"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/flower" />
+
         <TextView
             android:id="@+id/tvTodoList"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="40dp"
+            android:fontFamily="monospace"
             android:gravity="center"
             android:text="TODO LIST"
-            android:textColor="#000000"
+            android:textColor="#FFC107"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -34,11 +45,7 @@
             android:layout_below="@id/tvTodoList"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
-            android:text="Let's do your task today!"
-            android:textColor="#CB7373"
-            android:textSize="18sp"
-            android:textStyle="italic" />
+            android:layout_marginBottom="16dp" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -58,7 +65,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:drawableStart="@drawable/not_done"
+                    android:drawablePadding="10dp"
                     android:padding="10dp"
                     android:text="Todo"
                     android:textColor="#000000"
@@ -75,16 +83,23 @@
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/nothingTodo"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="100dp"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
                     app:lottie_rawRes="@raw/nothing" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="End" />
 
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:drawableStart="@drawable/done"
+                    android:drawablePadding="10dp"
                     android:padding="10dp"
                     android:text="Done"
                     android:textColor="#000000"
@@ -99,10 +114,16 @@
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/nothing"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="100dp"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
                     app:lottie_rawRes="@raw/nothing" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="End" />
 
             </LinearLayout>
         </ScrollView>
@@ -116,14 +137,15 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:src="@drawable/add"
-            app:backgroundTint="#FFF24235" />
+            app:backgroundTint="#864945" />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabDeleteAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@id/fabAddTodo"
             android:layout_alignParentEnd="true"
             android:layout_margin="16dp"
-            android:layout_above="@id/fabAddTodo"
             android:src="@drawable/delete"
             android:visibility="gone" />
 
@@ -131,9 +153,9 @@
             android:id="@+id/doneAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@id/fabDeleteAll"
             android:layout_alignParentEnd="true"
             android:layout_margin="16dp"
-            android:layout_above="@id/fabDeleteAll"
             android:src="@drawable/check"
             android:visibility="gone" />
 

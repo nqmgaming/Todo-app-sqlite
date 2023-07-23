@@ -29,6 +29,8 @@ import com.nqmgaming.assignment_minhnqph31902.UI.MainActivity;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import io.github.cutelibs.cutedialog.CuteDialog;
+
 public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHolder> {
     private final Context context;
     private final ArrayList<TodoDTO> notDoneItemsList;
@@ -75,19 +77,45 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
                 mainActivity.replaceFragment(new HomeFragment());
 
 
-
-
             }
         });
 
         viewBinderNotDone.bind(holder.swipeLayoutNotDone, String.valueOf(todoDTO.getId()));
         holder.tvDeleteNotDone.setOnClickListener(v -> {
             TodoDAO todoDAO = new TodoDAO(context);
-            todoDAO.deleteTodo(todoDTO);
-            notDoneItemsList.remove(position);
-            Toast.makeText(context, "Delete success", Toast.LENGTH_SHORT).show();
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, notDoneItemsList.size());
+            int result = todoDAO.deleteTodo(todoDTO);
+            if (result > 0) {
+                new CuteDialog.withIcon(context)
+                        .setIcon(R.drawable.done)
+                        .setTitle("Delete success")
+                        .setPositiveButtonText("OK", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        })
+                        .hideNegativeButton(true)
+                        .hideCloseIcon(true)
+                        .show();
+                notDoneItemsList.remove(position);
+                Toast.makeText(context, "Delete success", Toast.LENGTH_SHORT).show();
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, notDoneItemsList.size());
+            } else {
+                new CuteDialog.withIcon(context)
+                        .setIcon(R.drawable.close)
+                        .setTitle("Delete fail")
+                        .setPositiveButtonText("OK", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        })
+                        .hideNegativeButton(true)
+                        .hideCloseIcon(true)
+                        .show();
+            }
+
         });
         holder.tvEditNotDone.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -136,6 +164,19 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
                     TodoDAO todoDAO = new TodoDAO(context);
                     int status = todoDAO.updateTodo(todoDTO);
                     if (status > 0) {
+                        new CuteDialog.withIcon(context)
+                                .setIcon(R.drawable.done)
+                                .setTitle("Update success")
+                                .setPositiveButtonText("OK", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                    }
+                                })
+                                .hideNegativeButton(true)
+                                .hideCloseIcon(true)
+                                .show();
+                        notifyItemRangeChanged(position, notDoneItemsList.size());
                         alertDialog.dismiss();
                     }
                 }

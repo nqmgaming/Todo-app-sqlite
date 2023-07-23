@@ -210,7 +210,15 @@ public class HomeFragment extends Fragment {
                             todoDTO.setUserId(userPreferences.getIdUser());
                             long status = todoDAO.insertTodo(todoDTO);
                             if (status > 0) {
-                                Toast.makeText(getContext(), "Add todo success", Toast.LENGTH_SHORT).show();
+                                new CuteDialog.withIcon(getContext())
+                                        .setIcon(R.drawable.check)
+                                        .hideCloseIcon(true)
+                                        .setTitle("Add todo success")
+                                        .hideNegativeButton(true)
+                                        .setPositiveButtonColor(R.color.black)
+                                        .setPositiveButtonTextColor(R.color.white)
+                                        .setPositiveButtonText("OK", v13 -> Toast.makeText(getContext(), "OK", Toast.LENGTH_SHORT).show())
+                                        .show();
                                 todoDTOArrayList = todoDAO.getAllTodo();
                                 notDoneItemsList.clear();
                                 doneItemsList.clear();
@@ -248,7 +256,9 @@ public class HomeFragment extends Fragment {
         }
         fabDeleteAll.setOnClickListener(v -> {
             TodoDAO todoDAO = new TodoDAO(getContext());
-            new CuteDialog.withAnimation(getContext())
+            new CuteDialog.withIcon(getContext())
+                    .setIcon(R.drawable.trash)
+                    .hideCloseIcon(true)
                     .setTitle("Delete all?")
                     .setPositiveButtonText("Yes", v13 -> {
                         try {
@@ -278,7 +288,9 @@ public class HomeFragment extends Fragment {
 
         fabDoneAll.setOnClickListener(v -> {
             TodoDAO todoDAO = new TodoDAO(getContext());
-            new CuteDialog.withAnimation(getContext())
+            new CuteDialog.withIcon(getContext())
+                    .setIcon(R.drawable.done)
+                    .hideCloseIcon(true)
                     .setTitle("Done all?")
                     .setPositiveButtonText("Yes", v15 -> {
                         try {
