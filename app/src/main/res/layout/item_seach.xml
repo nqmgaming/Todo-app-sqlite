@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardViewTodoSearch"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="15dp">
+
+    <com.apachat.swipereveallayout.core.SwipeLayout
+        android:id="@+id/swipeLayoutSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:dragEdge="right"
+        app:mode="same_level">
+
+        <LinearLayout
+            android:id="@+id/layoutCutomizeSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="#DBCECE" />
+
+            <ImageButton
+                android:id="@+id/ibEditSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:backgroundTint="#FFFFFF"
+                android:src="@drawable/edit" />
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="#DBCECE" />
+
+            <ImageButton
+                android:id="@+id/ibDeleteSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:backgroundTint="#FFFFFF"
+                android:src="@drawable/delete" />
+
+        </LinearLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintTodoSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:textAlignment="center">
+
+
+            <CheckBox
+                android:id="@+id/checkboxAnimationSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_rawRes="@raw/checked" />
+
+            <TextView
+                android:id="@+id/tvNameTodoSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="hello"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                app:layout_constraintStart_toEndOf="@+id/checkboxAnimationSearch"
+                app:layout_constraintTop_toTopOf="@+id/checkboxAnimationSearch" />
+
+            <TextView
+                android:id="@+id/tvDateTodoEarch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date"
+                android:textColor="#828080"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/checkboxAnimationSearch"
+                app:layout_constraintStart_toEndOf="@+id/checkboxAnimationSearch" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.apachat.swipereveallayout.core.SwipeLayout>
+</androidx.cardview.widget.CardView>

@@ -5,18 +5,15 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.nqmgaming.assignment_minhnqph31902.DAO.TodoDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.TodoDTO;
 import com.nqmgaming.assignment_minhnqph31902.R;
@@ -24,7 +21,8 @@ import com.nqmgaming.assignment_minhnqph31902.DAO.UserDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.UserDTO;
 import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 
-import com.nqmgaming.assignment_minhnqph31902.UI.Account.SettingActivity;
+import com.nqmgaming.assignment_minhnqph31902.UI.Account.AccountSettingActivity;
+import com.nqmgaming.assignment_minhnqph31902.UI.Application.SettingActivity;
 import com.nqmgaming.assignment_minhnqph31902.UI.Intro.GetStartActivity;
 
 
@@ -57,13 +55,16 @@ public class UserFragment extends Fragment {
         TextView tvDone = view.findViewById(R.id.tvDone);
         TextView tvNotDone = view.findViewById(R.id.tvNotDone);
         TextView tvSignOut = view.findViewById(R.id.tvSignout);
-        ImageButton btnSetting = view.findViewById(R.id.btnSetting);
-
-        Glide.with(this)
-                .load(R.drawable.minh)
-                .transition(DrawableTransitionOptions.withCrossFade(500))
-                .transform(new CircleCrop())
-                .into(imgUser);
+        TextView tvTotal = view.findViewById(R.id.tvTotal);
+        TextView tvSetting = view.findViewById(R.id.tvSetting);
+        CardView cvUser = view.findViewById(R.id.cvUser);
+        TextView tvUsername = view.findViewById(R.id.tvUsername);
+//
+//        Glide.with(this)
+//                .load(R.drawable.minh)
+//                .transition(DrawableTransitionOptions.withCrossFade(500))
+//                .transform(new CircleCrop())
+//                .into(imgUser);
         UserDAO userDAO = new UserDAO(getContext());
         UserDTO userDTO = userDAO.getUserById(id);
 
@@ -79,6 +80,12 @@ public class UserFragment extends Fragment {
             // Handle the case when userDTO is null
             tvEmail.setText("Unknown Email");
         }
+        if (userDTO != null) {
+            tvUsername.setText("@" + userDTO.getUsername());
+        } else {
+            // Handle the case when userDTO is null
+            tvUsername.setText("Unknown Username");
+        }
         TodoDAO todoDAO = new TodoDAO(getContext());
         ArrayList<TodoDTO> userDTOArrayList = todoDAO.getAllTodoByUserId(id);
         ArrayList<TodoDTO> doneItemsList = new ArrayList<>();
@@ -90,16 +97,22 @@ public class UserFragment extends Fragment {
                 notDoneItemsList.add(todoDTO);
             }
         }
-        if (doneItemsList.size() == 0) {
+        if (notDoneItemsList.size() == 0) {
             tvDone.setText("Done: 0");
         } else {
-            tvDone.setText("Done: " + doneItemsList.size() + "");
+            tvDone.setText("Done: " + notDoneItemsList.size() + "");
         }
 
-        if (notDoneItemsList.size() == 0) {
+        if (doneItemsList.size() == 0) {
             tvNotDone.setText("Not Done: 0");
         } else {
-            tvNotDone.setText("Not Done: " + notDoneItemsList.size() + "");
+            tvNotDone.setText("Not Done: " + doneItemsList.size() + "");
+        }
+
+        if (userDTOArrayList.size() == 0) {
+            tvTotal.setText("Total: 0");
+        } else {
+            tvTotal.setText("Total: " + userDTOArrayList.size() + "");
         }
         tvSignOut.setOnClickListener(v -> new CuteDialog.withAnimation(getContext())
                 .setTitle("Sign out")
@@ -117,9 +130,15 @@ public class UserFragment extends Fragment {
                 })
                 .show());
 
-        btnSetting.setOnClickListener(v -> {
+        tvSetting.setOnClickListener(v -> {
             //Intent to Setting Activity
             Intent intent = new Intent(getContext(), SettingActivity.class);
+            startActivity(intent);
+        });
+
+        cvUser.setOnClickListener(v -> {
+            //Intent to Setting Activity
+            Intent intent = new Intent(getContext(), AccountSettingActivity.class);
             startActivity(intent);
         });
     }

@@ -83,7 +83,7 @@
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/nothingTodo"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="50dp"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
                     app:lottie_rawRes="@raw/nothing" />
@@ -92,7 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="End" />
+                    android:text="End Todo List" />
 
 
                 <TextView
@@ -113,8 +113,8 @@
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/nothing"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
                     app:lottie_rawRes="@raw/nothing" />
@@ -123,7 +123,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="End" />
+                    android:text="End Done List" />
 
             </LinearLayout>
         </ScrollView>

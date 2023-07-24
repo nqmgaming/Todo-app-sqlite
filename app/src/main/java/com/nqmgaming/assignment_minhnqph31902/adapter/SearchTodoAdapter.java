@@ -21,117 +21,74 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apachat.swipereveallayout.core.SwipeLayout;
 import com.apachat.swipereveallayout.core.ViewBinder;
-import com.nqmgaming.assignment_minhnqph31902.R;
 import com.nqmgaming.assignment_minhnqph31902.DAO.TodoDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.TodoDTO;
-import com.nqmgaming.assignment_minhnqph31902.Fragment.HomeFragment;
-import com.nqmgaming.assignment_minhnqph31902.UI.MainActivity;
+import com.nqmgaming.assignment_minhnqph31902.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.github.cutelibs.cutedialog.CuteDialog;
 
-public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHolder> {
-    //init variable
+public class SearchTodoAdapter extends RecyclerView.Adapter<SearchTodoAdapter.ViewHolder> {
     private final Context context;
-    private final ArrayList<TodoDTO> notDoneItemsList;
-    private final ArrayList<TodoDTO> doneItemsList;
+    private final ArrayList<TodoDTO> todoDTOArrayList;
+    TodoDAO todoDAO;
+    private final ViewBinder viewBinderSearch = new ViewBinder();
 
-    //init view binder
-    private final ViewBinder viewBinderNotDone = new ViewBinder();
-
-    //constructor
-    public DoneTodoAdapter(Context context, ArrayList<TodoDTO> notDoneItemsList, ArrayList<TodoDTO> doneItemsList) {
+    public SearchTodoAdapter(Context context, ArrayList<TodoDTO> todoDTOArrayList) {
         this.context = context;
-        this.notDoneItemsList = notDoneItemsList;
-        this.doneItemsList = doneItemsList;
+        this.todoDTOArrayList = todoDTOArrayList;
     }
 
-    //create view holder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.not_done_item, parent, false);
-        return new DoneTodoAdapter.ViewHolder(view);
+        LayoutInflater inflater = LayoutInflater.from(this.context);
+        View itemView = inflater.inflate(R.layout.item_seach, parent, false);
+        return new ViewHolder(itemView);
     }
 
-    //bind data to view holder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int pos) {
         int position = holder.getAdapterPosition();
-        //get todo item and set data
-        TodoDTO todoDTO = notDoneItemsList.get(position);
-        holder.txtNameNotTodo.setText(todoDTO.getName());
-        holder.txtDateEdit.setText(todoDTO.getEndDate());
+        TodoDTO todoDTO = todoDTOArrayList.get(position);
+        holder.tvNameSearch.setText(todoDTO.getName());
+        holder.tvDateSearch.setText(todoDTO.getEndDate());
         setItemAppearance(holder, todoDTO.getStatus());
-
-        //set status for checkbox when click
-        holder.uncheckBox.setOnClickListener(v -> {
-            if (!holder.uncheckBox.isChecked()) {
-                todoDTO.setStatus(1);
-                doneItemsList.add(todoDTO);
-                TodoDAO todoDAO = new TodoDAO(context);
-
+        holder.cbSearch.setOnClickListener(v -> {
+            if (holder.cbSearch.isChecked()) {
+                todoDTO.setStatus(0);
+                setCompletedAppearance(holder);
+                todoDAO = new TodoDAO(context);
                 int status = todoDAO.setStatusTodo(todoDTO);
                 if (status > 0) {
-                    notDoneItemsList.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, notDoneItemsList.size());
-
-                    //replace fragment to show done list
-                    MainActivity mainActivity = (MainActivity) context;
-                    mainActivity.replaceFragment(new HomeFragment());
-                } else {
 
                 }
 
-            }
-        });
-
-        //set swipe layout
-        viewBinderNotDone.bind(holder.swipeLayoutNotDone, String.valueOf(todoDTO.getId()));
-
-        //set event for swipe layout
-        holder.tvDeleteNotDone.setOnClickListener(v -> {
-            TodoDAO todoDAO = new TodoDAO(context);
-            int result = todoDAO.deleteTodo(todoDTO);
-            if (result > 0) {
-                new CuteDialog.withIcon(context)
-                        .setIcon(R.drawable.done)
-                        .setTitle("Delete success")
-                        .setPositiveButtonText("OK", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                notDoneItemsList.remove(position);
-                                notifyItemRemoved(position);
-                                notifyItemRangeChanged(position, notDoneItemsList.size());
-                            }
-                        })
-                        .hideNegativeButton(true)
-                        .hideCloseIcon(true)
-                        .show();
-
             } else {
-                new CuteDialog.withIcon(context)
-                        .setIcon(R.drawable.close)
-                        .setTitle("Delete fail")
-                        .setPositiveButtonText("OK", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                setIncompleteAppearance(holder);
+                todoDTO.setStatus(1);
+                todoDAO = new TodoDAO(context);
+                int status = todoDAO.setStatusTodo(todoDTO);
+                if (status > 0) {
 
-                            }
-                        })
-                        .hideNegativeButton(true)
-                        .hideCloseIcon(true)
-                        .show();
+                }
             }
-
         });
 
-        //set event for edit button
-        holder.tvEditNotDone.setOnClickListener(v -> {
+        viewBinderSearch.bind(holder.swipeLayout, String.valueOf(todoDTO.getId()));
+        holder.ibDelete.setOnClickListener(v -> {
+            todoDAO = new TodoDAO(context);
+            int status = todoDAO.deleteTodo(todoDTO);
+            if (status > 0) {
+                todoDTOArrayList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, todoDTOArrayList.size());
+
+            }
+        });
+        holder.ibEdit.setOnClickListener(v -> {
             //create dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             View view = LayoutInflater.from(context).inflate(R.layout.edit_todo, null);
@@ -203,7 +160,7 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
                                 .hideNegativeButton(true)
                                 .hideCloseIcon(true)
                                 .show();
-                        notifyItemRangeChanged(position, notDoneItemsList.size());
+                        notifyItemRangeChanged(position, todoDTOArrayList.size());
                         alertDialog.dismiss();
                     }
                 }
@@ -212,7 +169,7 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
         });
 
         //set event for item show content
-        holder.constraintNotTodo.setOnLongClickListener(v -> {
+        holder.constraintSearch.setOnLongClickListener(v -> {
             //create dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             View view = LayoutInflater.from(context).inflate(R.layout.content, null);
@@ -237,43 +194,46 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
             alertDialog.show();
             return true;
         });
+
+
     }
 
-    //get size of list item
     @Override
     public int getItemCount() {
-        return notDoneItemsList.size();
+        return todoDTOArrayList.size();
     }
 
-    //init view
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        CheckBox uncheckBox;
-        TextView txtNameNotTodo, txtDateEdit;
-        ConstraintLayout constraintNotTodo;
-        CardView cardViewMotTodo;
-        ImageButton tvEditNotDone, tvDeleteNotDone;
-        SwipeLayout swipeLayoutNotDone;
-        LinearLayout linearLayoutNotDone;
 
+        CheckBox cbSearch;
+        TextView tvNameSearch;
+        TextView tvDateSearch;
 
-        //init view
+        SwipeLayout swipeLayout;
+        LinearLayout llDelete;
+        ImageButton ibDelete, ibEdit;
+        CardView cvSearch;
+        ConstraintLayout constraintSearch;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            uncheckBox = itemView.findViewById(R.id.uncheckbox);
-            txtNameNotTodo = itemView.findViewById(R.id.tvNameNotTodo);
-            constraintNotTodo = itemView.findViewById(R.id.constraintNotTodo);
-            cardViewMotTodo = itemView.findViewById(R.id.cardViewNotTodo);
-            tvEditNotDone = itemView.findViewById(R.id.tvEditNotDone);
-            tvDeleteNotDone = itemView.findViewById(R.id.tvDeleteNotDone);
-            swipeLayoutNotDone = itemView.findViewById(R.id.swipeLayoutNotDone);
-            linearLayoutNotDone = itemView.findViewById(R.id.layoutCutomizeNotDone);
-            txtDateEdit = itemView.findViewById(R.id.txtDateNotDone);
+
+            cbSearch = itemView.findViewById(R.id.checkboxAnimationSearch);
+            tvNameSearch = itemView.findViewById(R.id.tvNameTodoSearch);
+            tvDateSearch = itemView.findViewById(R.id.tvDateTodoEarch);
+            swipeLayout = itemView.findViewById(R.id.swipeLayoutSearch);
+            ibDelete = itemView.findViewById(R.id.ibDeleteSearch);
+            ibEdit = itemView.findViewById(R.id.ibEditSearch);
+            cvSearch = itemView.findViewById(R.id.cardViewTodoSearch);
+            llDelete = itemView.findViewById(R.id.layoutCutomizeSearch);
+            constraintSearch = itemView.findViewById(R.id.constraintTodoSearch);
 
         }
+
     }
 
-    //set appearance for item
-    private void setItemAppearance(ViewHolder holder, int status) {
+    private void setItemAppearance(SearchTodoAdapter.ViewHolder holder, int status) {
         if (status == 1) {
             setIncompleteAppearance(holder);
         } else {
@@ -282,22 +242,22 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
     }
 
     //set appearance for item when it is done
-    private void setCompletedAppearance(DoneTodoAdapter.ViewHolder holder) {
-        holder.uncheckBox.setChecked(true);
-        holder.txtNameNotTodo.setAlpha(0.5f);
-        holder.constraintNotTodo.setBackgroundColor(context.getResources().getColor(R.color.gray, null));
-        holder.cardViewMotTodo.setCardBackgroundColor(context.getResources().getColor(R.color.gray, null));
-        holder.txtNameNotTodo.setPaintFlags(holder.txtNameNotTodo.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
-        holder.uncheckBox.setButtonTintList(context.getResources().getColorStateList(R.color.black, null));
+    private void setCompletedAppearance(SearchTodoAdapter.ViewHolder holder) {
+        holder.cbSearch.setChecked(true);
+        holder.tvNameSearch.setAlpha(0.5f);
+        holder.constraintSearch.setBackgroundColor(context.getResources().getColor(R.color.gray, null));
+        holder.cvSearch.setCardBackgroundColor(context.getResources().getColor(R.color.gray, null));
+        holder.tvNameSearch.setPaintFlags(holder.tvNameSearch.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
+        holder.cbSearch.setButtonTintList(context.getResources().getColorStateList(R.color.black, null));
     }
 
     //set appearance for item when it is not done
-    private void setIncompleteAppearance(DoneTodoAdapter.ViewHolder holder) {
-        holder.uncheckBox.setChecked(false);
-        holder.txtNameNotTodo.setAlpha(1f);
-        holder.constraintNotTodo.setBackgroundColor(context.getResources().getColor(R.color.white, null));
-        holder.cardViewMotTodo.setCardBackgroundColor(context.getResources().getColor(R.color.white, null));
-        holder.txtNameNotTodo.setPaintFlags(holder.txtNameNotTodo.getPaintFlags() & (~android.graphics.Paint.STRIKE_THRU_TEXT_FLAG));
-        holder.uncheckBox.setButtonTintList(context.getResources().getColorStateList(R.color.black, null));
+    private void setIncompleteAppearance(SearchTodoAdapter.ViewHolder holder) {
+        holder.cbSearch.setChecked(false);
+        holder.tvNameSearch.setAlpha(1f);
+        holder.constraintSearch.setBackgroundColor(context.getResources().getColor(R.color.white, null));
+        holder.cvSearch.setCardBackgroundColor(context.getResources().getColor(R.color.white, null));
+        holder.tvNameSearch.setPaintFlags(holder.tvNameSearch.getPaintFlags() & (~android.graphics.Paint.STRIKE_THRU_TEXT_FLAG));
+        holder.cbSearch.setButtonTintList(context.getResources().getColorStateList(R.color.black, null));
     }
 }
