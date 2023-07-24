@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -31,7 +32,7 @@ import java.util.Calendar;
 
 import io.github.cutelibs.cutedialog.CuteDialog;
 
-public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHolder> {
+public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHolder> {
     private final Context context;
     private final ArrayList<TodoDTO> notDoneItemsList;
     private final ArrayList<TodoDTO> doneItemsList;
@@ -39,7 +40,7 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
     private final ViewBinder viewBinderNotDone = new ViewBinder();
 
 
-    public NotTodoAdapter(Context context, ArrayList<TodoDTO> notDoneItemsList, ArrayList<TodoDTO> doneItemsList) {
+    public DoneTodoAdapter(Context context, ArrayList<TodoDTO> notDoneItemsList, ArrayList<TodoDTO> doneItemsList) {
         this.context = context;
         this.notDoneItemsList = notDoneItemsList;
         this.doneItemsList = doneItemsList;
@@ -50,7 +51,7 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.not_done_item, parent, false);
-        return new NotTodoAdapter.ViewHolder(view);
+        return new DoneTodoAdapter.ViewHolder(view);
     }
 
     @Override
@@ -188,13 +189,19 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             View view = LayoutInflater.from(context).inflate(R.layout.content, null);
             TextView tvContent = view.findViewById(R.id.content);
+            Button btnOK = view.findViewById(R.id.btnOK);
             ViewGroup parent = (ViewGroup) view.getParent();
             if (parent != null) {
                 parent.removeView(view);
             }
             tvContent.setText(todoDTO.getContent());
+
+
             builder.setView(view);
             AlertDialog alertDialog = builder.create();
+            btnOK.setOnClickListener(v1 -> {
+                alertDialog.dismiss();
+            });
             alertDialog.show();
             return true;
         });
@@ -238,7 +245,7 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
         }
     }
 
-    private void setCompletedAppearance(NotTodoAdapter.ViewHolder holder) {
+    private void setCompletedAppearance(DoneTodoAdapter.ViewHolder holder) {
         holder.uncheckBox.setChecked(true);
         holder.txtNameNotTodo.setAlpha(0.5f);
         holder.constraintNotTodo.setBackgroundColor(context.getResources().getColor(R.color.gray, null));
@@ -247,7 +254,7 @@ public class NotTodoAdapter extends RecyclerView.Adapter<NotTodoAdapter.ViewHold
         holder.uncheckBox.setButtonTintList(context.getResources().getColorStateList(R.color.black, null));
     }
 
-    private void setIncompleteAppearance(NotTodoAdapter.ViewHolder holder) {
+    private void setIncompleteAppearance(DoneTodoAdapter.ViewHolder holder) {
         holder.uncheckBox.setChecked(false);
         holder.txtNameNotTodo.setAlpha(1f);
         holder.constraintNotTodo.setBackgroundColor(context.getResources().getColor(R.color.white, null));

@@ -61,4 +61,8 @@
     <string name="calendar">Calendar</string>
     <string name="email">Email</string>
     <string name="agree">By Logging in and Registering, you agree to our <u>Terms</u> and <u>Conditions</u></string>
+    <string name="what_do_you_want_to_do">What do you want to do?</string>
+    <string name="description">Description...</string>
+    <string name="edit_todo">Edit Todo</string>
+    <string name="add_todo">Add Todo</string>
 </resources>

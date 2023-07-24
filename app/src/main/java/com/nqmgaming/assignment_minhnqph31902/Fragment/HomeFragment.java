@@ -23,7 +23,7 @@ import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
 import com.nqmgaming.assignment_minhnqph31902.DAO.TodoDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.TodoDTO;
-import com.nqmgaming.assignment_minhnqph31902.adapter.NotTodoAdapter;
+import com.nqmgaming.assignment_minhnqph31902.adapter.DoneTodoAdapter;
 import com.nqmgaming.assignment_minhnqph31902.adapter.TodoAdapter;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class HomeFragment extends Fragment {
     ArrayList<TodoDTO> doneItemsList = new ArrayList<>();
     ArrayList<TodoDTO> notDoneItemsList = new ArrayList<>();
     TodoAdapter todoAdapter;
-    NotTodoAdapter notTodoAdapter;
+    DoneTodoAdapter doneTodoAdapter;
     UserPreferences userPreferences;
     FloatingActionButton fabAddTodo;
     FloatingActionButton fabDeleteAll;
@@ -123,8 +123,8 @@ public class HomeFragment extends Fragment {
             //try catch
             try {
                 // Set item cho notTodoRecyclerView
-                notTodoAdapter = new NotTodoAdapter(getContext(), notDoneItemsList, doneItemsList);
-                notTodoRecyclerView.setAdapter(notTodoAdapter);
+                doneTodoAdapter = new DoneTodoAdapter(getContext(), notDoneItemsList, doneItemsList);
+                notTodoRecyclerView.setAdapter(doneTodoAdapter);
                 notTodoRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
                 // Set item cho todoRecyclerView
@@ -140,6 +140,7 @@ public class HomeFragment extends Fragment {
                 toggleSubMenu();
                 return true;
             });
+
             fabAddTodo.setOnClickListener(v -> {
                 //Build a custom dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
@@ -155,8 +156,17 @@ public class HomeFragment extends Fragment {
                 if (parent != null) {
                     parent.removeView(view1);
                 }
-                builder.setView(view1);
+                if (!isSubMenuOpen) {
+                    builder.setView(view1);
+
+                }
                 final AlertDialog alertDialog = builder.create();
+                //if user click fabAddTodo when sub menu is open do nothing
+                if (isSubMenuOpen) {
+                    alertDialog.dismiss();
+                    return;
+                }
+
                 //get date from system
                 String startDate = java.text.DateFormat.getDateTimeInstance().format(new java.util.Date());
 
@@ -229,16 +239,14 @@ public class HomeFragment extends Fragment {
                                         notDoneItemsList.add(todo);
                                     }
                                 }
-                                notTodoAdapter.notifyDataSetChanged();
+                                doneTodoAdapter.notifyDataSetChanged();
                                 todoAdapter.notifyDataSetChanged();
-                                notTodoAdapter.notifyDataSetChanged();
+                                doneTodoAdapter.notifyDataSetChanged();
                                 todoAdapter.notifyDataSetChanged();
 
                                 // Dismiss dialog
                                 alertDialog.dismiss();
 
-                            } else {
-                                Toast.makeText(getContext(), "Add todo fail", Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (Exception e) {
@@ -251,6 +259,8 @@ public class HomeFragment extends Fragment {
                 alertDialog.show();
 
             });
+
+
         } catch (Exception e) {
             Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -274,9 +284,9 @@ public class HomeFragment extends Fragment {
                                     notDoneItemsList.add(todo);
                                 }
                             }
-                            notTodoAdapter.notifyDataSetChanged();
+                            doneTodoAdapter.notifyDataSetChanged();
                             todoAdapter.notifyDataSetChanged();
-                            notTodoAdapter.notifyDataSetChanged();
+                            doneTodoAdapter.notifyDataSetChanged();
                             todoAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -306,9 +316,9 @@ public class HomeFragment extends Fragment {
                                     notDoneItemsList.add(todo);
                                 }
                             }
-                            notTodoAdapter.notifyDataSetChanged();
+                            doneTodoAdapter.notifyDataSetChanged();
                             todoAdapter.notifyDataSetChanged();
-                            notTodoAdapter.notifyDataSetChanged();
+                            doneTodoAdapter.notifyDataSetChanged();
                             todoAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();

@@ -234,38 +234,23 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
-        android:id="@+id/linearRememberMe"
-        android:layout_width="match_parent"
+    <CheckBox
+        android:id="@+id/cbRememberMe"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iplPasswordLogin">
-
-
-        <CheckBox
-            android:id="@+id/cbRememberMe"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="45dp"
-            android:text="Remember me ?"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/txtForgotPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginStart="10dp"
-            android:padding="5dp"
-            android:text="@string/forgot_your_password"
-            android:textColor="@color/black" />
-
-    </LinearLayout>
+        app:layout_constraintStart_toStartOf="@id/iplPasswordLogin"
+        app:layout_constraintTop_toBottomOf="@id/iplPasswordLogin"
+        android:text="Remember me ?"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/txtForgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/forgot_your_password"
+        android:padding="15dp"
+        app:layout_constraintEnd_toEndOf="@id/iplPasswordLogin"
+        app:layout_constraintTop_toBottomOf="@id/iplPasswordLogin"
+        android:textColor="@color/black" />
 
     <Button
         android:id="@+id/btnLogin"
@@ -280,8 +265,7 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearRememberMe"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@id/cbRememberMe" />
 
     <LinearLayout
         android:layout_width="wrap_content"
