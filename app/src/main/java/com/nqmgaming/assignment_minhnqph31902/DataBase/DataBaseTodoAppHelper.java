@@ -44,11 +44,6 @@ public class DataBaseTodoAppHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        //update not null for content and end_date in todo table
-        db.execSQL("INSERT INTO " + TABLE_TODO + " VALUES (4, 'Todo 1', 'Content 1', 0, '2021-09-01', '2021-09-01', 1)");
-        db.execSQL("INSERT INTO " + TABLE_TODO + " VALUES (5, 'Todo 2', 'Content 2', 0, '2021-09-01', '2021-09-01', 1)");
-        db.execSQL("INSERT INTO " + TABLE_TODO + " VALUES (6, 'Todo 3', 'Content 3', 0, '2021-09-01', '2021-09-01', 1)");
-
     }
 
 }

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,8 @@ import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
 import com.nqmgaming.assignment_minhnqph31902.DAO.TodoDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.TodoDTO;
-import com.nqmgaming.assignment_minhnqph31902.adapter.DoneTodoAdapter;
-import com.nqmgaming.assignment_minhnqph31902.adapter.TodoAdapter;
+import com.nqmgaming.assignment_minhnqph31902.Adapter.DoneTodoAdapter;
+import com.nqmgaming.assignment_minhnqph31902.Adapter.TodoAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,9 +58,11 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         try {
+
             fabAddTodo = view.findViewById(R.id.fabAddTodo);
             fabDeleteAll = view.findViewById(R.id.fabDeleteAll);
             fabDoneAll = view.findViewById(R.id.doneAll);
+
             RecyclerView todoRecyclerView = view.findViewById(R.id.rcTodo);
             RecyclerView notTodoRecyclerView = view.findViewById(R.id.rcNotTodo);
 
@@ -73,10 +76,12 @@ public class HomeFragment extends Fragment {
                 todoDAO = new TodoDAO(getContext());
                 todoDTOArrayList = todoDAO.getAllTodoByUserId(idUser);
 
+                //create 4 data entries if todoDTOArrayList is empty
                 if (todoDTOArrayList.size() == 0) {
                     // Create 4 data entries
                     for (int i = 0; i < 3; i++) {
                         int id = idUser + 2004 + (int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + i;
+
                         TodoDTO todoDTO = new TodoDTO();
                         todoDTO.setId(id);
                         todoDTO.setName("Todo " + (i + 1));
@@ -131,14 +136,18 @@ public class HomeFragment extends Fragment {
                 todoAdapter = new TodoAdapter(getContext(), doneItemsList, notDoneItemsList);
                 todoRecyclerView.setAdapter(todoAdapter);
                 todoRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
             } catch (Exception e) {
+
                 Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
 
             fabAddTodo.setOnLongClickListener(v -> {
 
                 toggleSubMenu();
                 return true;
+
             });
 
             fabAddTodo.setOnClickListener(v -> {
@@ -206,8 +215,12 @@ public class HomeFragment extends Fragment {
                         id = idUser + 2004 + todoDTOArrayList.get(todoDTOArrayList.size() - 1).getId();
                     }
 
-                    if (title.isEmpty() || content.isEmpty()) {
-                        Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    if (TextUtils.isEmpty(title)) {
+                        edtTitle.setError("Please enter title");
+                        edtTitle.requestFocus();
+                    } else if (TextUtils.isEmpty(content)) {
+                        edtTitle.setError("Please enter title");
+                        edtTitle.requestFocus();
                     } else {
                         try {
                             TodoDTO todoDTO = new TodoDTO();
@@ -220,14 +233,16 @@ public class HomeFragment extends Fragment {
                             todoDTO.setUserId(userPreferences.getIdUser());
                             long status = todoDAO.insertTodo(todoDTO);
                             if (status > 0) {
-                                new CuteDialog.withIcon(getContext())
-                                        .setIcon(R.drawable.check)
-                                        .hideCloseIcon(true)
-                                        .setTitle("Add todo success")
-                                        .hideNegativeButton(true)
+                                new CuteDialog.withAnimation(getContext())
+                                        .setAnimation(R.raw.suc)
+                                        .setTitle("Add success")
+                                        .setTitleTextColor(R.color.black)
                                         .setPositiveButtonColor(R.color.black)
-                                        .setPositiveButtonTextColor(R.color.white)
-                                        .setPositiveButtonText("OK", v13 -> Toast.makeText(getContext(), "OK", Toast.LENGTH_SHORT).show())
+                                        .setPositiveButtonText("OK", v15 -> {
+
+                                        })
+                                        .hideNegativeButton(true)
+                                        .hideCloseIcon(true)
                                         .show();
                                 todoDTOArrayList = todoDAO.getAllTodo();
                                 notDoneItemsList.clear();
@@ -247,6 +262,18 @@ public class HomeFragment extends Fragment {
                                 // Dismiss dialog
                                 alertDialog.dismiss();
 
+                            } else {
+                                new CuteDialog.withAnimation(getContext())
+                                        .setAnimation(R.raw.error)
+                                        .setTitle("Add fail")
+                                        .setTitleTextColor(R.color.black)
+                                        .setPositiveButtonColor(R.color.black)
+                                        .setPositiveButtonText("OK", v15 -> {
+
+                                        })
+                                        .hideNegativeButton(true)
+                                        .hideCloseIcon(true)
+                                        .show();
                             }
 
                         } catch (Exception e) {
@@ -269,25 +296,51 @@ public class HomeFragment extends Fragment {
             new CuteDialog.withIcon(getContext())
                     .setIcon(R.drawable.trash)
                     .hideCloseIcon(true)
+                    .setTitleTextColor(R.color.black)
+                    .setPositiveButtonColor(R.color.black)
                     .setTitle("Delete all?")
                     .setPositiveButtonText("Yes", v13 -> {
                         try {
-                            todoDAO.deleteAllTodo();
-                            Toast.makeText(getContext(), "Delete all success", Toast.LENGTH_SHORT).show();
-                            todoDTOArrayList = todoDAO.getAllTodo();
-                            notDoneItemsList.clear();
-                            doneItemsList.clear();
-                            for (TodoDTO todo : todoDTOArrayList) {
-                                if (todo.getStatus() == 1) {
-                                    doneItemsList.add(todo);
-                                } else {
-                                    notDoneItemsList.add(todo);
+                            int result = todoDAO.deleteAllTodo();
+                            if (result > 0) {
+                                todoDTOArrayList = todoDAO.getAllTodo();
+                                notDoneItemsList.clear();
+                                doneItemsList.clear();
+                                for (TodoDTO todo : todoDTOArrayList) {
+                                    if (todo.getStatus() == 1) {
+                                        doneItemsList.add(todo);
+                                    } else {
+                                        notDoneItemsList.add(todo);
+                                    }
                                 }
+                                doneTodoAdapter.notifyDataSetChanged();
+                                todoAdapter.notifyDataSetChanged();
+                                doneTodoAdapter.notifyDataSetChanged();
+                                todoAdapter.notifyDataSetChanged();
+                                new CuteDialog.withAnimation(getContext())
+                                        .setAnimation(R.raw.suc)
+                                        .setTitle("Delete all success")
+                                        .setTitleTextColor(R.color.black)
+                                        .setPositiveButtonColor(R.color.black)
+                                        .setPositiveButtonText("OK", v14 -> {
+
+                                        })
+                                        .hideNegativeButton(true)
+                                        .hideCloseIcon(true)
+                                        .show();
+                            } else {
+                                new CuteDialog.withAnimation(getContext())
+                                        .setAnimation(R.raw.error)
+                                        .setTitle("Delete all fail")
+                                        .setTitleTextColor(R.color.black)
+                                        .setPositiveButtonColor(R.color.black)
+                                        .setPositiveButtonText("OK", v14 -> {
+
+                                        })
+                                        .hideNegativeButton(true)
+                                        .hideCloseIcon(true)
+                                        .show();
                             }
-                            doneTodoAdapter.notifyDataSetChanged();
-                            todoAdapter.notifyDataSetChanged();
-                            doneTodoAdapter.notifyDataSetChanged();
-                            todoAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -298,28 +351,55 @@ public class HomeFragment extends Fragment {
 
         fabDoneAll.setOnClickListener(v -> {
             TodoDAO todoDAO = new TodoDAO(getContext());
-            new CuteDialog.withIcon(getContext())
-                    .setIcon(R.drawable.done)
+            new CuteDialog.withAnimation(getContext())
+                    .setAnimation(R.raw.question)
                     .hideCloseIcon(true)
+                    .setTitleTextColor(R.color.black)
+                    .setPositiveButtonColor(R.color.black)
                     .setTitle("Done all?")
                     .setPositiveButtonText("Yes", v15 -> {
                         try {
-                            todoDAO.doneAllTodo();
-                            Toast.makeText(getContext(), "Done all success", Toast.LENGTH_SHORT).show();
-                            todoDTOArrayList = todoDAO.getAllTodo();
-                            notDoneItemsList.clear();
-                            doneItemsList.clear();
-                            for (TodoDTO todo : todoDTOArrayList) {
-                                if (todo.getStatus() == 1) {
-                                    doneItemsList.add(todo);
-                                } else {
-                                    notDoneItemsList.add(todo);
+                            int result = todoDAO.doneAllTodo();
+                            if (result > 0) {
+
+                                todoDTOArrayList = todoDAO.getAllTodo();
+                                notDoneItemsList.clear();
+                                doneItemsList.clear();
+                                for (TodoDTO todo : todoDTOArrayList) {
+                                    if (todo.getStatus() == 1) {
+                                        doneItemsList.add(todo);
+                                    } else {
+                                        notDoneItemsList.add(todo);
+                                    }
                                 }
+                                doneTodoAdapter.notifyDataSetChanged();
+                                todoAdapter.notifyDataSetChanged();
+                                doneTodoAdapter.notifyDataSetChanged();
+                                todoAdapter.notifyDataSetChanged();
+                                new CuteDialog.withAnimation(getContext())
+                                        .setAnimation(R.raw.suc)
+                                        .setTitle("Done all success")
+                                        .setTitleTextColor(R.color.black)
+                                        .setPositiveButtonColor(R.color.black)
+                                        .setPositiveButtonText("OK", v16 -> {
+
+                                        })
+                                        .hideNegativeButton(true)
+                                        .hideCloseIcon(true)
+                                        .show();
+                            } else {
+                                new CuteDialog.withAnimation(getContext())
+                                        .setAnimation(R.raw.error)
+                                        .setTitle("Done all fail")
+                                        .setTitleTextColor(R.color.black)
+                                        .setPositiveButtonColor(R.color.black)
+                                        .setPositiveButtonText("OK", v16 -> {
+
+                                        })
+                                        .hideNegativeButton(true)
+                                        .hideCloseIcon(true)
+                                        .show();
                             }
-                            doneTodoAdapter.notifyDataSetChanged();
-                            todoAdapter.notifyDataSetChanged();
-                            doneTodoAdapter.notifyDataSetChanged();
-                            todoAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }

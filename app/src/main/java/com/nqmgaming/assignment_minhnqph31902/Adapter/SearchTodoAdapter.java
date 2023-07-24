@@ -1,7 +1,8 @@
-package com.nqmgaming.assignment_minhnqph31902.adapter;
+package com.nqmgaming.assignment_minhnqph31902.Adapter;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -23,7 +23,7 @@ import com.apachat.swipereveallayout.core.SwipeLayout;
 import com.apachat.swipereveallayout.core.ViewBinder;
 import com.nqmgaming.assignment_minhnqph31902.DAO.TodoDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.TodoDTO;
-import com.nqmgaming.assignment_minhnqph31902.Fragment.HomeFragment;
+import com.nqmgaming.assignment_minhnqph31902.Fragment.SearchFragment;
 import com.nqmgaming.assignment_minhnqph31902.R;
 import com.nqmgaming.assignment_minhnqph31902.UI.MainActivity;
 
@@ -63,19 +63,13 @@ public class SearchTodoAdapter extends RecyclerView.Adapter<SearchTodoAdapter.Vi
                 todoDTO.setStatus(0);
                 setCompletedAppearance(holder);
                 todoDAO = new TodoDAO(context);
-                int status = todoDAO.setStatusTodo(todoDTO);
-                if (status > 0) {
-
-                }
+                todoDAO.setStatusTodo(todoDTO);
 
             } else {
                 setIncompleteAppearance(holder);
                 todoDTO.setStatus(1);
                 todoDAO = new TodoDAO(context);
-                int status = todoDAO.setStatusTodo(todoDTO);
-                if (status > 0) {
-
-                }
+                todoDAO.setStatusTodo(todoDTO);
             }
         });
 
@@ -87,7 +81,29 @@ public class SearchTodoAdapter extends RecyclerView.Adapter<SearchTodoAdapter.Vi
                 todoDTOArrayList.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, todoDTOArrayList.size());
+                new CuteDialog.withAnimation(context)
+                        .setAnimation(R.raw.suc)
+                        .setTitle("Delete success")
+                        .setTitleTextColor(R.color.black)
+                        .setPositiveButtonColor(R.color.black)
+                        .setPositiveButtonText("OK", v14 -> {
 
+                        })
+                        .hideNegativeButton(true)
+                        .hideCloseIcon(true)
+                        .show();
+            } else {
+                new CuteDialog.withAnimation(context)
+                        .setAnimation(R.raw.error)
+                        .setTitle("Delete fail")
+                        .setTitleTextColor(R.color.black)
+                        .setPositiveButtonColor(R.color.black)
+                        .setPositiveButtonText("OK", v13 -> {
+
+                        })
+                        .hideNegativeButton(true)
+                        .hideCloseIcon(true)
+                        .show();
             }
         });
         holder.ibEdit.setOnClickListener(v -> {
@@ -138,8 +154,10 @@ public class SearchTodoAdapter extends RecyclerView.Adapter<SearchTodoAdapter.Vi
                 String date = tvDateEdit.getText().toString().trim();
 
                 //validate data
-                if (title.isEmpty() || description.isEmpty() || date.isEmpty()) {
-                    Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(title)) {
+                    edtTitleEdit.setError("Title is not empty");
+                } else if (TextUtils.isEmpty(description)) {
+                    edtDescriptionEdit.setError("Description is not empty");
                 } else {
                     //set data to todoDTO
                     todoDTO.setName(title);
@@ -152,21 +170,32 @@ public class SearchTodoAdapter extends RecyclerView.Adapter<SearchTodoAdapter.Vi
                     if (status > 0) {
                         //replace fragment to show done list
                         MainActivity mainActivity = (MainActivity) context;
-                        mainActivity.replaceFragment(new HomeFragment());
-                        new CuteDialog.withIcon(context)
-                                .setIcon(R.drawable.done)
+                        mainActivity.replaceFragment(new SearchFragment());
+                        new CuteDialog.withAnimation(context)
+                                .setAnimation(R.raw.suc)
                                 .setTitle("Update success")
-                                .setPositiveButtonText("OK", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
+                                .setTitleTextColor(R.color.black)
+                                .setPositiveButtonColor(R.color.black)
+                                .setPositiveButtonText("OK", v16 -> {
 
-                                    }
                                 })
                                 .hideNegativeButton(true)
                                 .hideCloseIcon(true)
                                 .show();
                         notifyItemRangeChanged(position, todoDTOArrayList.size());
                         alertDialog.dismiss();
+                    } else {
+                        new CuteDialog.withAnimation(context)
+                                .setAnimation(R.raw.error)
+                                .setTitle("Update fail")
+                                .setTitleTextColor(R.color.black)
+                                .setPositiveButtonColor(R.color.black)
+                                .setPositiveButtonText("OK", v15 -> {
+
+                                })
+                                .hideNegativeButton(true)
+                                .hideCloseIcon(true)
+                                .show();
                     }
                 }
             });

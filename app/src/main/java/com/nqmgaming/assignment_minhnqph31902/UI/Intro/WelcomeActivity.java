@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import com.nqmgaming.assignment_minhnqph31902.adapter.SlideAdapter;
+import com.nqmgaming.assignment_minhnqph31902.Adapter.SlideAdapter;
 import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
 import com.nqmgaming.assignment_minhnqph31902.UI.MainActivity;

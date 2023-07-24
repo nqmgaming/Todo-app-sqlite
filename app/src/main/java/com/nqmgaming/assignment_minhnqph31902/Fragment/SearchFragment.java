@@ -18,8 +18,7 @@ import com.nqmgaming.assignment_minhnqph31902.DAO.TodoDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.TodoDTO;
 import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
-import com.nqmgaming.assignment_minhnqph31902.adapter.SearchTodoAdapter;
-import com.nqmgaming.assignment_minhnqph31902.adapter.TodoAdapter;
+import com.nqmgaming.assignment_minhnqph31902.Adapter.SearchTodoAdapter;
 
 import java.util.ArrayList;
 
@@ -60,7 +59,6 @@ public class SearchFragment extends Fragment {
         svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // Handle the text submission (if needed)
                 return false;
             }
 

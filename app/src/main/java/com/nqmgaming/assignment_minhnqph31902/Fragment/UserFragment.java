@@ -50,6 +50,7 @@ public class UserFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ImageView imgUser = view.findViewById(R.id.imgUser);
+
         TextView tvName = view.findViewById(R.id.tvName);
         TextView tvEmail = view.findViewById(R.id.tvEmail);
         TextView tvDone = view.findViewById(R.id.tvDone);
@@ -57,8 +58,12 @@ public class UserFragment extends Fragment {
         TextView tvSignOut = view.findViewById(R.id.tvSignout);
         TextView tvTotal = view.findViewById(R.id.tvTotal);
         TextView tvSetting = view.findViewById(R.id.tvSetting);
-        CardView cvUser = view.findViewById(R.id.cvUser);
         TextView tvUsername = view.findViewById(R.id.tvUsername);
+        TextView tvRateUs = view.findViewById(R.id.tvRateUs);
+        TextView AboutUs = view.findViewById(R.id.tvAboutUs);
+
+        CardView cvUser = view.findViewById(R.id.cvUser);
+
 //
 //        Glide.with(this)
 //                .load(R.drawable.minh)
@@ -139,6 +144,18 @@ public class UserFragment extends Fragment {
         cvUser.setOnClickListener(v -> {
             //Intent to Setting Activity
             Intent intent = new Intent(getContext(), AccountSettingActivity.class);
+            startActivity(intent);
+        });
+        tvRateUs.setOnClickListener(v -> {
+          //intent google play
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(android.net.Uri.parse("https://play.google.com/store/apps/details?id=com.nqmgaming.assignment_minhnqph31902"));
+            startActivity(intent);
+        });
+        AboutUs.setOnClickListener(v -> {
+            //intent google play
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(android.net.Uri.parse("https://www.facebook.com/minh.nguyen.31902"));
             startActivity(intent);
         });
     }

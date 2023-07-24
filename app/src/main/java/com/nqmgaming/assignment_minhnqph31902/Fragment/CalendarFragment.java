@@ -22,9 +22,12 @@ import com.nqmgaming.assignment_minhnqph31902.DAO.TodoDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.TodoDTO;
 import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
+
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
+
+import io.github.cutelibs.cutedialog.CuteDialog;
 
 public class CalendarFragment extends Fragment {
 
@@ -33,10 +36,16 @@ public class CalendarFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_calendar, container, false);
+        // Inflate the layout for this fragment
 
-        selectedDateTextView = rootView.findViewById(R.id.selectedDateTextView);
-        DatePicker datePicker = rootView.findViewById(R.id.datePicker);
+        return inflater.inflate(R.layout.fragment_calendar, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        selectedDateTextView = view.findViewById(R.id.selectedDateTextView);
+        DatePicker datePicker = view.findViewById(R.id.datePicker);
         // Set the initial date to the current date
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -47,15 +56,11 @@ public class CalendarFragment extends Fragment {
         selectedDateTextView.setText(getFormattedDate(year, month, dayOfMonth));
 
         // Set an OnDateChangedListener to handle date selection
-        datePicker.init(year, month, dayOfMonth, (view, year1, monthOfYear, dayOfMonth1) -> {
-            // Display the selected date in the TextView
-            selectedDateTextView.setText(getFormattedDate(year1, monthOfYear, dayOfMonth1));
-
-            // Show an alert with the selected date
-            showDateAlert(year1, monthOfYear, dayOfMonth1);
+        datePicker.init(year, month, dayOfMonth, (view1, year1, month1, dayOfMonth1) -> {
+            // Display the selected date on the TextView
+            selectedDateTextView.setText(getFormattedDate(year1, month1, dayOfMonth1));
+            showDateAlert(year1, month1, dayOfMonth1);
         });
-
-        return rootView;
     }
 
     private String getFormattedDate(int year, int month, int dayOfMonth) {
@@ -132,16 +137,35 @@ public class CalendarFragment extends Fragment {
             TodoDAO todoDAO = new TodoDAO(getContext());
             long result = todoDAO.insertTodo(todoDTO);
             if (result > 0) {
-                Toast.makeText(getContext(), "Add success", Toast.LENGTH_SHORT).show();
-                //Intent to home
+                new CuteDialog.withAnimation(getContext())
+                        .setAnimation(R.raw.suc)
+                        .setTitle("Add success")
+                        .setTitleTextColor(R.color.black)
+                        .setPositiveButtonColor(R.color.black)
+                        .setPositiveButtonText("OK", v15 -> {
+
+                        })
+                        .hideNegativeButton(true)
+                        .hideCloseIcon(true)
+                        .show();
+                //Intent to home fragment
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
                 alertDialog.dismiss();
             } else {
-                Toast.makeText(getContext(), "Add failed", Toast.LENGTH_SHORT).show();
+                new CuteDialog.withAnimation(getContext())
+                        .setAnimation(R.raw.error)
+                        .setTitle("Add fail")
+                        .setTitleTextColor(R.color.black)
+                        .setPositiveButtonColor(R.color.black)
+                        .setPositiveButtonText("OK", v14 -> {
+
+                        })
+                        .hideNegativeButton(true)
+                        .hideCloseIcon(true)
+                        .show();
             }
         });
-
 
         alertDialog.show();
     }
