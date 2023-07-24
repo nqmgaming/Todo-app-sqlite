@@ -33,19 +33,22 @@ import java.util.Calendar;
 import io.github.cutelibs.cutedialog.CuteDialog;
 
 public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHolder> {
+    //init variable
     private final Context context;
     private final ArrayList<TodoDTO> notDoneItemsList;
     private final ArrayList<TodoDTO> doneItemsList;
 
+    //init view binder
     private final ViewBinder viewBinderNotDone = new ViewBinder();
 
-
+    //constructor
     public DoneTodoAdapter(Context context, ArrayList<TodoDTO> notDoneItemsList, ArrayList<TodoDTO> doneItemsList) {
         this.context = context;
         this.notDoneItemsList = notDoneItemsList;
         this.doneItemsList = doneItemsList;
     }
 
+    //create view holder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -54,8 +57,10 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
         return new DoneTodoAdapter.ViewHolder(view);
     }
 
+    //bind data to view holder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        //get todo item and set data
         TodoDTO todoDTO = notDoneItemsList.get(position);
         holder.txtNameNotTodo.setText(todoDTO.getName());
         holder.txtDateEdit.setText(todoDTO.getEndDate());
@@ -68,20 +73,26 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
                 doneItemsList.add(todoDTO);
                 TodoDAO todoDAO = new TodoDAO(context);
 
-                todoDAO.setStatusTodo(todoDTO);
-                notDoneItemsList.remove(position);
-                Toast.makeText(context, doneItemsList.size() + "+ " + notDoneItemsList.size() + "", Toast.LENGTH_SHORT).show();
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, notDoneItemsList.size());
+                int status = todoDAO.setStatusTodo(todoDTO);
+                if (status > 0) {
+                    notDoneItemsList.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, notDoneItemsList.size());
 
-                MainActivity mainActivity = (MainActivity) context;
-                mainActivity.replaceFragment(new HomeFragment());
-
+                    //replace fragment to show done list
+                    MainActivity mainActivity = (MainActivity) context;
+                    mainActivity.replaceFragment(new HomeFragment());
+                } else {
+                    Toast.makeText(context, "Fail", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
 
+        //set swipe layout
         viewBinderNotDone.bind(holder.swipeLayoutNotDone, String.valueOf(todoDTO.getId()));
+
+        //set event for swipe layout
         holder.tvDeleteNotDone.setOnClickListener(v -> {
             TodoDAO todoDAO = new TodoDAO(context);
             int result = todoDAO.deleteTodo(todoDTO);
@@ -92,16 +103,16 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
                         .setPositiveButtonText("OK", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
+                                notDoneItemsList.remove(position);
+                                Toast.makeText(context, "Delete success", Toast.LENGTH_SHORT).show();
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, notDoneItemsList.size());
                             }
                         })
                         .hideNegativeButton(true)
                         .hideCloseIcon(true)
                         .show();
-                notDoneItemsList.remove(position);
-                Toast.makeText(context, "Delete success", Toast.LENGTH_SHORT).show();
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, notDoneItemsList.size());
+
             } else {
                 new CuteDialog.withIcon(context)
                         .setIcon(R.drawable.close)
@@ -118,16 +129,22 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
             }
 
         });
+
+        //set event for edit button
         holder.tvEditNotDone.setOnClickListener(v -> {
+            //create dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             View view = LayoutInflater.from(context).inflate(R.layout.edit_todo, null);
             builder.setView(view);
+
+            //init view
             EditText edtTitleEdit = view.findViewById(R.id.etTodoEdit);
             EditText edtDescriptionEdit = view.findViewById(R.id.etDescEdit);
             TextView tvDateEdit = view.findViewById(R.id.tvDateEdit);
             ImageButton btnPickDateEdit = view.findViewById(R.id.btnPickDateEdit);
             ImageButton btnSendEdit = view.findViewById(R.id.imgSendEit);
 
+            //set data
             ViewGroup parent = (ViewGroup) view.getParent();
             if (parent != null) {
                 parent.removeView(view);
@@ -139,12 +156,14 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
             edtDescriptionEdit.setText(todoDTO.getContent());
             tvDateEdit.setText(todoDTO.getEndDate());
 
+            //set event for button
             btnPickDateEdit.setOnClickListener(v1 -> {
                 Calendar calendar = Calendar.getInstance();
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 int month = calendar.get(Calendar.MONTH);
                 int year = calendar.get(Calendar.YEAR);
 
+                //create date picker dialog
                 DatePickerDialog datePickerDialog = new DatePickerDialog(context, (view1, year1, month1, dayOfMonth) -> {
                     String date = dayOfMonth + "/" + (month1 + 1) + "/" + year1;
                     tvDateEdit.setText(date);
@@ -152,18 +171,25 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
                 datePickerDialog.show();
             });
 
+            //set event for button send edit
             btnSendEdit.setOnClickListener(v12 -> {
+                //get data
                 String title = edtTitleEdit.getText().toString().trim();
                 String description = edtDescriptionEdit.getText().toString().trim();
                 String date = tvDateEdit.getText().toString().trim();
+
+                //validate data
                 if (title.isEmpty() || description.isEmpty() || date.isEmpty()) {
                     Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 } else {
+                    //set data to todoDTO
                     todoDTO.setName(title);
                     todoDTO.setContent(description);
                     todoDTO.setEndDate(date);
                     TodoDAO todoDAO = new TodoDAO(context);
                     int status = todoDAO.updateTodo(todoDTO);
+
+                    //check status
                     if (status > 0) {
                         new CuteDialog.withIcon(context)
                                 .setIcon(R.drawable.done)
@@ -185,11 +211,17 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
             alertDialog.show();
         });
 
+        //set event for item show content
         holder.constraintNotTodo.setOnLongClickListener(v -> {
+            //create dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             View view = LayoutInflater.from(context).inflate(R.layout.content, null);
+
+            //init view
             TextView tvContent = view.findViewById(R.id.content);
             Button btnOK = view.findViewById(R.id.btnOK);
+
+            //set data
             ViewGroup parent = (ViewGroup) view.getParent();
             if (parent != null) {
                 parent.removeView(view);
@@ -207,11 +239,13 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
         });
     }
 
+    //get size of list item
     @Override
     public int getItemCount() {
         return notDoneItemsList.size();
     }
 
+    //init view
     public static class ViewHolder extends RecyclerView.ViewHolder {
         CheckBox uncheckBox;
         TextView txtNameNotTodo, txtDateEdit;
@@ -222,6 +256,7 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
         LinearLayout linearLayoutNotDone;
 
 
+        //init view
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             uncheckBox = itemView.findViewById(R.id.uncheckbox);
@@ -237,6 +272,7 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
         }
     }
 
+    //set appearance for item
     private void setItemAppearance(ViewHolder holder, int status) {
         if (status == 1) {
             setIncompleteAppearance(holder);
@@ -245,6 +281,7 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
         }
     }
 
+    //set appearance for item when it is done
     private void setCompletedAppearance(DoneTodoAdapter.ViewHolder holder) {
         holder.uncheckBox.setChecked(true);
         holder.txtNameNotTodo.setAlpha(0.5f);
@@ -254,6 +291,7 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
         holder.uncheckBox.setButtonTintList(context.getResources().getColorStateList(R.color.black, null));
     }
 
+    //set appearance for item when it is not done
     private void setIncompleteAppearance(DoneTodoAdapter.ViewHolder holder) {
         holder.uncheckBox.setChecked(false);
         holder.txtNameNotTodo.setAlpha(1f);
