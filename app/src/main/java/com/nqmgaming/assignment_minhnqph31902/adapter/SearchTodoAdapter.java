@@ -23,7 +23,9 @@ import com.apachat.swipereveallayout.core.SwipeLayout;
 import com.apachat.swipereveallayout.core.ViewBinder;
 import com.nqmgaming.assignment_minhnqph31902.DAO.TodoDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.TodoDTO;
+import com.nqmgaming.assignment_minhnqph31902.Fragment.HomeFragment;
 import com.nqmgaming.assignment_minhnqph31902.R;
+import com.nqmgaming.assignment_minhnqph31902.UI.MainActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -148,6 +150,9 @@ public class SearchTodoAdapter extends RecyclerView.Adapter<SearchTodoAdapter.Vi
 
                     //check status
                     if (status > 0) {
+                        //replace fragment to show done list
+                        MainActivity mainActivity = (MainActivity) context;
+                        mainActivity.replaceFragment(new HomeFragment());
                         new CuteDialog.withIcon(context)
                                 .setIcon(R.drawable.done)
                                 .setTitle("Update success")

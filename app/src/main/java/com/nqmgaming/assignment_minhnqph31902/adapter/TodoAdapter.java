@@ -21,9 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apachat.swipereveallayout.core.SwipeLayout;
 import com.apachat.swipereveallayout.core.ViewBinder;
+import com.nqmgaming.assignment_minhnqph31902.Fragment.HomeFragment;
 import com.nqmgaming.assignment_minhnqph31902.R;
 import com.nqmgaming.assignment_minhnqph31902.DAO.TodoDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.TodoDTO;
+import com.nqmgaming.assignment_minhnqph31902.UI.MainActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,7 +39,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     private final ArrayList<TodoDTO> doneItemsList;
     private final ArrayList<TodoDTO> notDoneItemsList;
 
-    //create viewbinder
+    //create viewfinder
     private final ViewBinder viewBinderDone = new ViewBinder();
 
 
@@ -48,7 +50,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
         this.notDoneItemsList = notDoneItemsList;
     }
 
-    //create viewholder
+    //create view-holder
     @NonNull
     @Override
     public TodoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -82,14 +84,13 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position, doneItemsList.size());
                 } else {
-                    new CuteDialog.withIcon(context)
-                            .setIcon(R.drawable.close)
+                    new CuteDialog.withAnimation(context)
+                            .setAnimation(R.raw.error)
                             .setTitle("Update fail")
-                            .setPositiveButtonText("OK", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
+                            .setTitleTextColor(R.color.black)
+                            .setPositiveButtonColor(R.color.black)
+                            .setPositiveButtonText("OK", v13 -> {
 
-                                }
                             })
                             .hideNegativeButton(true)
                             .hideCloseIcon(true)
@@ -103,19 +104,18 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
         viewBinderDone.bind(holder.swipeLayout, String.valueOf(todoDTO.getId()));
 
         // Set event for swipe layout
-        holder.tvDelete.setOnClickListener(v -> {
+        holder.iBDelete.setOnClickListener(v -> {
             TodoDAO todoDAO = new TodoDAO(context);
             int result = todoDAO.deleteTodo(todoDTO);
             // If result > 0, delete success
             if (result > 0) {
-                new CuteDialog.withIcon(context)
-                        .setIcon(R.drawable.done)
+                new CuteDialog.withAnimation(context)
+                        .setAnimation(R.raw.suc)
                         .setTitle("Delete success")
-                        .setPositiveButtonText("OK", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                        .setTitleTextColor(R.color.black)
+                        .setPositiveButtonColor(R.color.black)
+                        .setPositiveButtonText("OK", v14 -> {
 
-                            }
                         })
                         .hideNegativeButton(true)
                         .hideCloseIcon(true)
@@ -124,14 +124,13 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, doneItemsList.size());
             } else {
-                new CuteDialog.withIcon(context)
-                        .setIcon(R.drawable.close)
+                new CuteDialog.withAnimation(context)
+                        .setAnimation(R.raw.error)
                         .setTitle("Delete fail")
-                        .setPositiveButtonText("OK", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                        .setTitleTextColor(R.color.black)
+                        .setPositiveButtonColor(R.color.black)
+                        .setPositiveButtonText("OK", v15 -> {
 
-                            }
                         })
                         .hideNegativeButton(true)
                         .hideCloseIcon(true)
@@ -142,7 +141,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
         });
 
         // Set event for swipe layout
-        holder.tvEdit.setOnClickListener(v -> {
+        holder.iBEdit.setOnClickListener(v -> {
             // Create alert dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             View view = LayoutInflater.from(context).inflate(R.layout.edit_todo, null);
@@ -198,14 +197,16 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                     TodoDAO todoDAO = new TodoDAO(context);
                     int status = todoDAO.updateTodo(todoDTO);
                     if (status > 0) {
-                        new CuteDialog.withIcon(context)
-                                .setIcon(R.drawable.done)
+                        //replace fragment to show done list
+                        MainActivity mainActivity = (MainActivity) context;
+                        mainActivity.replaceFragment(new HomeFragment());
+                        new CuteDialog.withAnimation(context)
+                                .setAnimation(R.raw.suc)
                                 .setTitle("Update success")
-                                .setPositiveButtonText("OK", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
+                                .setTitleTextColor(R.color.black)
+                                .setPositiveButtonColor(R.color.black)
+                                .setPositiveButtonText("OK", v16 -> {
 
-                                    }
                                 })
                                 .hideNegativeButton(true)
                                 .hideCloseIcon(true)
@@ -236,9 +237,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
             tvContent.setText(todoDTO.getContent());
             builder.setView(view);
             AlertDialog alertDialog = builder.create();
-            btnOK.setOnClickListener(v1 -> {
-                alertDialog.dismiss();
-            });
+            btnOK.setOnClickListener(v1 -> alertDialog.dismiss());
             alertDialog.show();
             return true;
         });
@@ -255,7 +254,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
         // Create view
         CheckBox checkBox;
         TextView txtNameTodo, tvDate;
-        ImageButton tvEdit, tvDelete;
+        ImageButton iBEdit, iBDelete;
         ConstraintLayout constraintTodo;
         CardView cardViewTodo;
         SwipeLayout swipeLayout;
@@ -271,8 +270,8 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
             cardViewTodo = itemView.findViewById(R.id.cardViewTodo);
             swipeLayout = itemView.findViewById(R.id.swipeLayout);
             linearLayout = itemView.findViewById(R.id.layoutCutomize);
-            tvEdit = itemView.findViewById(R.id.tvEdit);
-            tvDelete = itemView.findViewById(R.id.tvDelete);
+            iBEdit = itemView.findViewById(R.id.iBEdit);
+            iBDelete = itemView.findViewById(R.id.iBDelete);
             tvDate = itemView.findViewById(R.id.tvDateTodo);
         }
     }

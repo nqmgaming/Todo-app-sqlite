@@ -16,7 +16,10 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.nqmgaming.assignment_minhnqph31902.DAO.UserDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.UserDTO;
+import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
+import com.nqmgaming.assignment_minhnqph31902.UI.Intro.GetStartActivity;
+import com.nqmgaming.assignment_minhnqph31902.UI.MainActivity;
 
 import io.github.cutelibs.cutedialog.CuteDialog;
 
@@ -33,6 +36,16 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UserPreferences userPreferences = new UserPreferences(this);
+
+        //if login, go to MainActivity
+        if (userPreferences.isLogin()) {
+
+            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+            finish();
+            return;
+
+        }
         setContentView(R.layout.activity_register);
 
         //mapping variables with view

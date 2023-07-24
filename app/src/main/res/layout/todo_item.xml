@@ -29,7 +29,7 @@
                 android:background="#DBCECE" />
 
             <ImageButton
-                android:id="@+id/tvEdit"
+                android:id="@+id/iBEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -43,7 +43,7 @@
                 android:background="#DBCECE" />
 
             <ImageButton
-                android:id="@+id/tvDelete"
+                android:id="@+id/iBDelete"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"

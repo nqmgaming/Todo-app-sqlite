@@ -94,7 +94,7 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
         viewBinderNotDone.bind(holder.swipeLayoutNotDone, String.valueOf(todoDTO.getId()));
 
         //set event for swipe layout
-        holder.tvDeleteNotDone.setOnClickListener(v -> {
+        holder.iBDeleteNotDone.setOnClickListener(v -> {
             TodoDAO todoDAO = new TodoDAO(context);
             int result = todoDAO.deleteTodo(todoDTO);
             if (result > 0) {
@@ -131,7 +131,7 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
         });
 
         //set event for edit button
-        holder.tvEditNotDone.setOnClickListener(v -> {
+        holder.iBEditNotDone.setOnClickListener(v -> {
             //create dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             View view = LayoutInflater.from(context).inflate(R.layout.edit_todo, null);
@@ -191,12 +191,16 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
 
                     //check status
                     if (status > 0) {
+                        //replace fragment to show done list
+                        MainActivity mainActivity = (MainActivity) context;
+                        mainActivity.replaceFragment(new HomeFragment());
                         new CuteDialog.withIcon(context)
                                 .setIcon(R.drawable.done)
                                 .setTitle("Update success")
                                 .setPositiveButtonText("OK", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+
 
                                     }
                                 })
@@ -251,7 +255,7 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
         TextView txtNameNotTodo, txtDateEdit;
         ConstraintLayout constraintNotTodo;
         CardView cardViewMotTodo;
-        ImageButton tvEditNotDone, tvDeleteNotDone;
+        ImageButton iBEditNotDone, iBDeleteNotDone;
         SwipeLayout swipeLayoutNotDone;
         LinearLayout linearLayoutNotDone;
 
@@ -259,12 +263,12 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
         //init view
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            uncheckBox = itemView.findViewById(R.id.uncheckbox);
+            uncheckBox = itemView.findViewById(R.id.unCheckBox);
             txtNameNotTodo = itemView.findViewById(R.id.tvNameNotTodo);
             constraintNotTodo = itemView.findViewById(R.id.constraintNotTodo);
             cardViewMotTodo = itemView.findViewById(R.id.cardViewNotTodo);
-            tvEditNotDone = itemView.findViewById(R.id.tvEditNotDone);
-            tvDeleteNotDone = itemView.findViewById(R.id.tvDeleteNotDone);
+            iBEditNotDone = itemView.findViewById(R.id.iBEditNotDone);
+            iBDeleteNotDone = itemView.findViewById(R.id.iBDeleteNotDone);
             swipeLayoutNotDone = itemView.findViewById(R.id.swipeLayoutNotDone);
             linearLayoutNotDone = itemView.findViewById(R.id.layoutCutomizeNotDone);
             txtDateEdit = itemView.findViewById(R.id.txtDateNotDone);

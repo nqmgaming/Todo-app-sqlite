@@ -29,7 +29,7 @@
                 android:background="#DBCECE" />
 
             <ImageButton
-                android:id="@+id/tvEditNotDone"
+                android:id="@+id/iBEditNotDone"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -43,7 +43,7 @@
                 android:background="#DBCECE" />
 
             <ImageButton
-                android:id="@+id/tvDeleteNotDone"
+                android:id="@+id/iBDeleteNotDone"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -59,7 +59,7 @@
             android:layout_margin="5dp">
 
             <CheckBox
-                android:id="@+id/uncheckbox"
+                android:id="@+id/unCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -76,8 +76,8 @@
                 android:text="hello"
                 android:textColor="#000000"
                 android:textSize="15dp"
-                app:layout_constraintStart_toEndOf="@+id/uncheckbox"
-                app:layout_constraintTop_toTopOf="@+id/uncheckbox" />
+                app:layout_constraintStart_toEndOf="@+id/unCheckBox"
+                app:layout_constraintTop_toTopOf="@+id/unCheckBox" />
             <TextView
                 android:id="@+id/txtDateNotDone"
                 android:layout_width="wrap_content"
@@ -85,8 +85,8 @@
                 android:text="Date"
                 android:textColor="#828080"
                 android:textSize="12dp"
-                app:layout_constraintBottom_toBottomOf="@+id/uncheckbox"
-                app:layout_constraintStart_toEndOf="@+id/uncheckbox" />
+                app:layout_constraintBottom_toBottomOf="@+id/unCheckBox"
+                app:layout_constraintStart_toEndOf="@+id/unCheckBox" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.apachat.swipereveallayout.core.SwipeLayout>
 </androidx.cardview.widget.CardView>

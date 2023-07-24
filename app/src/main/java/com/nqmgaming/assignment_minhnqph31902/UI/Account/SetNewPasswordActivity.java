@@ -13,7 +13,10 @@ import android.widget.Toast;
 
 import com.nqmgaming.assignment_minhnqph31902.DAO.UserDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.UserDTO;
+import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
+import com.nqmgaming.assignment_minhnqph31902.UI.Intro.GetStartActivity;
+import com.nqmgaming.assignment_minhnqph31902.UI.MainActivity;
 
 import io.github.cutelibs.cutedialog.CuteDialog;
 
@@ -28,6 +31,16 @@ public class SetNewPasswordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UserPreferences userPreferences = new UserPreferences(this);
+
+        //if login, go to MainActivity
+        if (userPreferences.isLogin()) {
+
+            startActivity(new Intent(SetNewPasswordActivity.this, MainActivity.class));
+            finish();
+            return;
+
+        }
         setContentView(R.layout.activity_set_new_password);
 
         //mapping variables with view
@@ -110,15 +123,13 @@ public class SetNewPasswordActivity extends AppCompatActivity {
             }
 
             //update new password to database
-            //update new password to database
             int idDTO;
             try {
                 assert idDTOString != null;
                 idDTO = Integer.parseInt(idDTOString);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-                // Handle the exception, e.g., show an error message or take appropriate action.
-                return; // Exit the method since the idDTO is not valid.
+                return;
             }
 
             UserDTO userDTO = new UserDTO(idDTO, username, email, newPassword, firstName, lastName);
