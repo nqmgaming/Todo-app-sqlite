@@ -157,32 +157,12 @@ public class CalendarFragment extends Fragment {
                         .hideNegativeButton(true)
                         .hideCloseIcon(true)
                         .show();
-                //Intent to home fragment
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-                alertDialog.dismiss();
-                Intent openAppIntent = new Intent(requireContext(), MainActivity.class); // Change MainActivity to your desired activity
-                openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                PendingIntent pendingIntent = PendingIntent.getActivity(requireContext(), 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-                // Create an intent to close the notification
-                Intent closeNotificationIntent = new Intent(requireContext(), CloseNotificationReceiver.class); // Create a BroadcastReceiver to handle the action
-                PendingIntent closeNotificationPendingIntent = PendingIntent.getBroadcast(requireContext(), 0, closeNotificationIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-                // Build and show the notification
-                NotificationCompat.Builder builder1 = new NotificationCompat.Builder(getContext(), CreateNotification.CHANNEL_ID)
-                        .setSmallIcon(R.drawable.minh)
-                        .setContentTitle("Todo App")
-                        .setContentIntent(pendingIntent)
-                        .addAction(R.drawable.close, "Close", closeNotificationPendingIntent)
-                        .setContentText("You have a new todo")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-                NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getContext());
-                if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                    //yêu cầu quyền
-                    ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
-                    return;
-                }
-                int notificationId = todoDTO.getId();
-                notificationManagerCompat.notify(notificationId, builder1.build());
+                //create notification
+                String titleNoti = "Todo: " + title;
+                String contentNoti = "Content: " + content;
+                int idNoti = idTodo;
+                CreateNotification createNotification = new CreateNotification();
+                createNotification.postNotification(requireContext(), titleNoti, contentNoti, idNoti);
             } else {
                 new CuteDialog.withAnimation(getContext())
                         .setAnimation(R.raw.error)

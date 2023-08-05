@@ -100,26 +100,11 @@ public class SearchTodoAdapter extends RecyclerView.Adapter<SearchTodoAdapter.Vi
                         .hideNegativeButton(true)
                         .hideCloseIcon(true)
                         .show();
-                //Intent
-                Intent intent = new Intent(context, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-                //notification
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CreateNotification.CHANNEL_ID)
-                        .setSmallIcon(R.drawable.minh)
-                        .setContentTitle("Delete success")
-                        .setContentIntent(pendingIntent)
-                        .setContentText("Deleted todo with ID: " + todoDTO.getId())
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-                if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                    //yêu cầu quyền
-                    ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
-                    return;
-                }
-                notificationManager.notify(0, builder.build());
+                String title = "Delete success";
+                String message = "Delete todo id: " + todoDTO.getId() + " success" + "\n" + "Name: " + todoDTO.getName();
+                int id = todoDTO.getId();
+                CreateNotification createNotification = new CreateNotification();
+                createNotification.postNotification(context, title, message, id);
             } else {
                 new CuteDialog.withAnimation(context)
                         .setAnimation(R.raw.error)
@@ -132,18 +117,6 @@ public class SearchTodoAdapter extends RecyclerView.Adapter<SearchTodoAdapter.Vi
                         .hideNegativeButton(true)
                         .hideCloseIcon(true)
                         .show();
-                Intent openAppIntent = new Intent(context, MainActivity.class); // Change MainActivity to your desired activity
-                openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CreateNotification.CHANNEL_ID)
-                        .setSmallIcon(R.drawable.minh)
-                        .setContentTitle("Delete fail")
-                        .setContentIntent(pendingIntent)
-                        .setContentText("Failed to delete todo with ID: " + todoDTO.getId())
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-                notificationManager.notify(1, builder.build());
             }
         });
         holder.ibEdit.setOnClickListener(v -> {
@@ -250,19 +223,8 @@ public class SearchTodoAdapter extends RecyclerView.Adapter<SearchTodoAdapter.Vi
                         notificationId = 3;  // Choose appropriate ID
                     }
                     // Create an intent to open the desired activity when notification is clicked
-                    Intent openAppIntent = new Intent(context, MainActivity.class); // Change MainActivity to your desired activity
-                    openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-                    builderNotif = new NotificationCompat.Builder(context, CreateNotification.CHANNEL_ID)
-                            .setSmallIcon(R.drawable.minh)
-                            .setContentTitle(notificationTitle)
-                            .setContentText(notificationText)
-                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                            .setContentIntent(pendingIntent);
-
-                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-                    notificationManager.notify(notificationId, builderNotif.build());
+                    CreateNotification createNotification = new CreateNotification();
+                    createNotification.postNotification(context, notificationTitle, notificationText, notificationId);
                 }
             });
             alertDialog.show();

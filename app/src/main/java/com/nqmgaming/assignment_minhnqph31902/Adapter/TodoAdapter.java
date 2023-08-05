@@ -160,23 +160,8 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                 notificationText = "Failed to delete todo with ID: " + todoDTO.getId();
                 notificationId = 5;  // Choose appropriate ID
             }
-            Intent openAppIntent = new Intent(context, MainActivity.class); // Change MainActivity to your desired activity
-            openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-            builderNotif = new NotificationCompat.Builder(context, CreateNotification.CHANNEL_ID)
-                    .setSmallIcon(R.drawable.minh)
-                    .setContentIntent(pendingIntent)
-                    .setContentTitle(notificationTitle)
-                    .setContentText(notificationText)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-            if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                //yêu cầu quyền
-                ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
-                return;
-            }
-            notificationManager.notify(notificationId, builderNotif.build());
+            CreateNotification createNotification = new CreateNotification();
+            createNotification.postNotification(context, notificationTitle, notificationText, notificationId);
         });
 
         // Set event for swipe layout
@@ -271,20 +256,8 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                         notificationText = "Failed to update todo with ID: " + todoDTO.getId();
 
                     }
-                    Intent openAppIntent = new Intent(context, MainActivity.class); // Change MainActivity to your desired activity
-                    openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-
-                    builderNotif = new NotificationCompat.Builder(context, CreateNotification.CHANNEL_ID)
-                            .setSmallIcon(R.drawable.minh)
-                            .setContentTitle(notificationTitle)
-                            .setContentText(notificationText)
-                            .setContentIntent(pendingIntent)
-                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-                    notificationManager.notify(notificationId, builderNotif.build());
+                    CreateNotification createNotification = new CreateNotification();
+                    createNotification.postNotification(context, notificationTitle, notificationText, notificationId);
                 }
             });
             alertDialog.show();

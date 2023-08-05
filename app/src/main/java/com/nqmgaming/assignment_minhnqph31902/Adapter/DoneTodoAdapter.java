@@ -116,73 +116,55 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
         holder.iBDeleteNotDone.setOnClickListener(v -> {
             TodoDAO todoDAO = new TodoDAO(context);
             int result = todoDAO.deleteTodo(todoDTO);
-            if (result > 0) {
-                notDoneItemsList.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, notDoneItemsList.size());
 
-                new CuteDialog.withAnimation(context)
-                        .setAnimation(R.raw.suc)
-                        .setTitle("Delete success")
-                        .setTitleTextColor(R.color.black)
-                        .setPositiveButtonColor(R.color.black)
-                        .setPositiveButtonText("OK", v14 -> {
-                        })
-                        .hideNegativeButton(true)
-                        .hideCloseIcon(true)
-                        .show();
+            new CuteDialog.withIcon(context)
+                    .setTitle("Are you sure?")
+                    .setDescription("Do you want to delete this todo?")
+                    .setIcon(R.drawable.trash)
+                    .hideCloseIcon(true)
+                    .setPositiveButtonText("OK", v1 -> {
+                        if (result > 0) {
+                            notDoneItemsList.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, notDoneItemsList.size());
+
+                            new CuteDialog.withAnimation(context)
+                                    .setAnimation(R.raw.suc)
+                                    .setTitle("Delete success")
+                                    .setTitleTextColor(R.color.black)
+                                    .setPositiveButtonColor(R.color.black)
+                                    .setPositiveButtonText("OK", v14 -> {
+                                    })
+                                    .hideNegativeButton(true)
+                                    .hideCloseIcon(true)
+                                    .show();
+
+                            String title = "Delete success item done todo";
+                            String message = "You have deleted " + todoDTO.getName() + " from done todo list";
+                            int id = todoDTO.getId();
+                            // Create an intent to open the desired activity when notification is clicked
+                            CreateNotification createNotification = new CreateNotification();
+                            createNotification.postNotification(context, title, message, id);
 
 
-                // Create an intent to open the app when notification is clicked
-                Intent openAppIntent = new Intent(context, MainActivity.class); // Change MainActivity to your desired activity
-                openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-                // Build and show the notification
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CreateNotification.CHANNEL_ID)
-                        .setSmallIcon(R.drawable.minh)
-                        .setContentTitle("Delete success")
-                        .setContentText("Deleted todo with ID: " + todoDTO.getId() + "\n" + "Name: " + todoDTO.getName())
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setContentIntent(appPendingIntent)  // Open main activity when notification is clicked
-                        .setAutoCancel(true);
-
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-
-                if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                    //yêu cầu quyền
-                    ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
-                    return;
-                }
-                notificationManager.notify(0, builder.build());
-
-            } else {
-                new CuteDialog.withAnimation(context)
-                        .setAnimation(R.raw.error)
-                        .setTitle("Delete fail")
-                        .setTitleTextColor(R.color.black)
-                        .setPositiveButtonColor(R.color.black)
-                        .setPositiveButtonText("OK", v13 -> {
-                        })
-                        .hideNegativeButton(true)
-                        .hideCloseIcon(true)
-                        .show();
-                // Create an intent to open the desired activity when notification is clicked
-                Intent openAppIntent = new Intent(context, MainActivity.class); // Change MainActivity to your desired activity
-                openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-                // You can also show a notification when the deletion fails
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CreateNotification.CHANNEL_ID)
-                        .setSmallIcon(R.drawable.minh)
-                        .setContentTitle("Delete fail")
-                        .setContentText("Failed to delete todo with ID: " + todoDTO.getId())
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setContentIntent(pendingIntent);
-
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-                notificationManager.notify(1, builder.build());
-            }
+                        } else {
+                            new CuteDialog.withAnimation(context)
+                                    .setAnimation(R.raw.error)
+                                    .setTitle("Delete fail")
+                                    .setTitleTextColor(R.color.black)
+                                    .setPositiveButtonColor(R.color.black)
+                                    .setPositiveButtonText("OK", v13 -> {
+                                    })
+                                    .hideNegativeButton(true)
+                                    .hideCloseIcon(true)
+                                    .show();
+                        }
+                    })
+                    .setPositiveButtonColor(R.color.active)
+                    .setNegativeButtonText("Cancel", v12 -> {
+                    })
+                    .setNegativeButtonColor(R.color.inactive)
+                    .show();
         });
 
         //set event for edit button
@@ -269,8 +251,10 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
                         notifyItemRangeChanged(position, notDoneItemsList.size());
                         alertDialog.dismiss();
 
-                        notificationTitle = "Update success";
-                        notificationText = "Updated todo with ID: " + todoDTO.getId() + " successfully.";
+                        notificationTitle = "Update success todo item";
+                        notificationText = "id: " + todoDTO.getId() + "\n" + "title: " + todoDTO.getName() + "\n" + "description: "
+                                + todoDTO.getContent() + "\n" + "date: " + todoDTO.getEndDate() + "\n" + "status: " + todoDTO.getStatus() +
+                                "user: " + todoDTO.getUserId();
                         notificationId = 2;  // Choose appropriate ID
                     } else {
                         new CuteDialog.withAnimation(context)
@@ -286,25 +270,12 @@ public class DoneTodoAdapter extends RecyclerView.Adapter<DoneTodoAdapter.ViewHo
 
                         notificationTitle = "Update fail";
                         notificationText = "Failed to update todo with ID: " + todoDTO.getId() + ". Please try again later.";
-                        notificationId = 3;  // Choose appropriate ID
+                        notificationId = 3;
                     }
 
-                    // Create an intent to open the desired activity when notification is clicked
-                    Intent openAppIntent = new Intent(context, MainActivity.class); // Change MainActivity to your desired activity
-                    openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-                    // Build and show the notification
-                    NotificationCompat.Builder builderNotifications = new NotificationCompat.Builder(context, CreateNotification.CHANNEL_ID)
-                            .setSmallIcon(R.drawable.minh)
-                            .setContentTitle(notificationTitle)
-                            .setContentText(notificationText)
-                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                            .setContentIntent(pendingIntent)
-                            .setAutoCancel(true);
-
-                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-                    notificationManager.notify(notificationId, builderNotifications.build());
+                    CreateNotification createNotification = new CreateNotification();
+                    createNotification.postNotification(context, notificationTitle, notificationText, notificationId);
 
                 }
             });

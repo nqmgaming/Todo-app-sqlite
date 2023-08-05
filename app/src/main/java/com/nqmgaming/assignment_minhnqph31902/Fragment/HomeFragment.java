@@ -259,6 +259,8 @@ public class HomeFragment extends Fragment {
                             todoDTO.setUserId(userPreferences.getIdUser());
                             long status = todoDAO.insertTodo(todoDTO);
                             if (status > 0) {
+                                scrollTodoList.setVisibility(View.VISIBLE);
+                                lottieEmpty.setVisibility(View.GONE);
                                 new CuteDialog.withAnimation(getContext())
                                         .setAnimation(R.raw.suc)
                                         .setTitle("Add success")
@@ -286,29 +288,11 @@ public class HomeFragment extends Fragment {
                                 todoAdapter.notifyDataSetChanged();
                                 // Dismiss dialog
                                 alertDialog.dismiss();
-                                // Create an intent to open the desired activity when notification is clicked
-                                Intent openAppIntent = new Intent(requireContext(), MainActivity.class); // Change MainActivity to your desired activity
-                                openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                PendingIntent pendingIntent = PendingIntent.getActivity(requireContext(), 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-                                // Create an intent to close the notification
-                                Intent closeNotificationIntent = new Intent(requireContext(), CloseNotificationReceiver.class); // Create a BroadcastReceiver to handle the action
-                                PendingIntent closeNotificationPendingIntent = PendingIntent.getBroadcast(requireContext(), 0, closeNotificationIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-                                // Build and show the notification
-                                NotificationCompat.Builder builder1 = new NotificationCompat.Builder(getContext(), CreateNotification.CHANNEL_ID)
-                                        .setSmallIcon(R.drawable.minh)
-                                        .setContentTitle("Todo App")
-                                        .setContentIntent(pendingIntent)
-                                        .addAction(R.drawable.close, "Close", closeNotificationPendingIntent)
-                                        .setContentText("You have a new todo")
-                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-                                NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getContext());
-                                if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                                    //yêu cầu quyền
-                                    ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
-                                    return;
-                                }
-                                int notificationId = todoDTO.getId();
-                                notificationManagerCompat.notify(notificationId, builder1.build());
+                                String title_add = "Add success item todo";
+                                String content_add = "Add success item todo: " + todoDTO.getName();
+                                int id_add = todoDTO.getId();
+                                CreateNotification createNotification = new CreateNotification();
+                                createNotification.postNotification(requireContext(), title_add, content_add, id_add);
 
                             } else {
                                 new CuteDialog.withAnimation(getContext())
@@ -376,6 +360,8 @@ public class HomeFragment extends Fragment {
                                         .hideNegativeButton(true)
                                         .hideCloseIcon(true)
                                         .show();
+                                scrollTodoList.setVisibility(View.GONE);
+                                lottieEmpty.setVisibility(View.VISIBLE);
                             } else {
                                 new CuteDialog.withAnimation(getContext())
                                         .setAnimation(R.raw.error)

@@ -60,7 +60,6 @@ public class UserPreferences {
 
     }
 
-    //ban đầu khi mới tạo tài khoản người dùng sẽ được tạo sẵn 3 item todo ngẫu nhiên nhưng khi đăng nhập lại thì sẽ không được tạo lại nữa
     public void setFirstTime(boolean state) {
 
         sharedPreferences.edit()
@@ -74,5 +73,19 @@ public class UserPreferences {
 
         return sharedPreferences.getBoolean("first_time", true);
 
+    }
+
+    private static final String KEY_NOTIFICATION_STATE = "key_notification_state";
+
+    // Kiểm tra trạng thái thông báo (đã bật hay tắt)
+    public boolean isNotificationEnabled() {
+        return sharedPreferences.getBoolean(KEY_NOTIFICATION_STATE, true);
+    }
+
+    // Đặt trạng thái thông báo (true: đã bật, false: đã tắt)
+    public void setNotificationEnabled(boolean state) {
+        sharedPreferences.edit()
+                .putBoolean(KEY_NOTIFICATION_STATE, state)
+                .apply();
     }
 }
