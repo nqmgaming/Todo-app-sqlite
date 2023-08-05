@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "984995030315",
+    "project_id": "assignment-minhnqph31902",
+    "storage_bucket": "assignment-minhnqph31902.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:984995030315:android:b2f0c6bf5b00ae8a9e116e",
+        "android_client_info": {
+          "package_name": "com.nqmgaming.assignment_minhnqph31902"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "984995030315-0j2gue5d1t0nodgmh5416l44be7emohh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBj3e9eTM9XvCONI_rD0w4ZeQyTw3cYhlc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "984995030315-0j2gue5d1t0nodgmh5416l44be7emohh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
