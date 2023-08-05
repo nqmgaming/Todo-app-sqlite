@@ -88,7 +88,8 @@
                 android:text="Date"
                 android:textColor="#828080"
                 android:textSize="12dp"
-                app:layout_constraintBottom_toBottomOf="@+id/checkboxAnimation"
+                android:paddingBottom="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/checkboxAnimation" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.apachat.swipereveallayout.core.SwipeLayout>

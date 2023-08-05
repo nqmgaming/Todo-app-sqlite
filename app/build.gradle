@@ -1,5 +1,7 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -55,5 +57,6 @@ dependencies {
     implementation 'com.github.CuteLibs:CuteDialog:2.1'
     implementation 'com.github.tsuryo:Swipeable-RecyclerView:1.1'
     implementation group: 'com.apachat', name: 'swipereveallayout-android', version: '1.1.2'
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
 
 }

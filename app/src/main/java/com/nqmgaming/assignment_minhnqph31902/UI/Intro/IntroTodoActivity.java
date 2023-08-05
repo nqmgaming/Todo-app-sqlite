@@ -16,9 +16,18 @@ public class IntroTodoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_intro_todo);
 
         // Set delay 3s
-        new Handler().postDelayed(() -> {
-            startActivity(new Intent(IntroTodoActivity.this, WelcomeActivity.class));
-            finish();
-        }, 3500);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                // Start new activity
+                Intent intent = new Intent(IntroTodoActivity.this, WelcomeActivity.class);
+                startActivity(intent);
+
+                // Finish current activity
+                finish();
+
+            }
+        }, 3000);
     }
 }

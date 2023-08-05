@@ -1,5 +1,6 @@
 package com.nqmgaming.assignment_minhnqph31902.UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -27,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
         setContentView(binding.getRoot());
-
         replaceFragment(new HomeFragment());
         binding.bottomNavigation.setBackground(null);
 
@@ -48,6 +48,27 @@ public class MainActivity extends AppCompatActivity {
 
         userPreferences = new UserPreferences(this);
 
+        //swipe to refresh
+        binding.swipeRefresh.setOnRefreshListener(() -> {
+            //nếu như đang màn fragment nào thì sẽ refresh lại fragment đó
+            if (binding.bottomNavigation.getSelectedItemId() == R.id.home) {
+                replaceFragment(new HomeFragment());
+            } else if (binding.bottomNavigation.getSelectedItemId() == R.id.user) {
+                replaceFragment(new UserFragment());
+            } else if (binding.bottomNavigation.getSelectedItemId() == R.id.search) {
+                replaceFragment(new SearchFragment());
+
+            } else if (binding.bottomNavigation.getSelectedItemId() == R.id.calendar) {
+                replaceFragment(new CalendarFragment());
+            }
+            binding.swipeRefresh.setRefreshing(false);
+        });
+        Intent intent = getIntent();
+        if (intent != null && intent.getAction() != null && intent.getAction().equals(Intent.ACTION_MAIN)) {
+            // The activity was started from a notification, handle it here
+            handleNotificationClick(intent);
+        }
+
     }
 
 
@@ -61,5 +82,18 @@ public class MainActivity extends AppCompatActivity {
         }
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
+    }
+
+    private void handleNotificationClick(Intent intent) {
+        // Check any additional data passed with the intent from the notification
+        // You can use intent.getExtras() to retrieve any data if needed
+
+        // For example, you can check if there's an extra named "notification_data"
+        if (intent.hasExtra("notification_data")) {
+            String notificationData = intent.getStringExtra("notification_data");
+
+            // Handle the data or navigation based on the notification
+            // For example, you can show a dialog or navigate to a specific fragment/activity
+        }
     }
 }

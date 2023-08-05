@@ -1,7 +1,12 @@
 package com.nqmgaming.assignment_minhnqph31902.Adapter;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +22,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apachat.swipereveallayout.core.SwipeLayout;
 import com.apachat.swipereveallayout.core.ViewBinder;
 import com.nqmgaming.assignment_minhnqph31902.Fragment.HomeFragment;
+import com.nqmgaming.assignment_minhnqph31902.Permission.CreateNotification;
 import com.nqmgaming.assignment_minhnqph31902.R;
 import com.nqmgaming.assignment_minhnqph31902.DAO.TodoDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.TodoDTO;
@@ -107,6 +116,13 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
         holder.iBDelete.setOnClickListener(v -> {
             TodoDAO todoDAO = new TodoDAO(context);
             int result = todoDAO.deleteTodo(todoDTO);
+
+            // Build and show the notification
+            NotificationCompat.Builder builderNotif;
+            String notificationTitle;
+            String notificationText;
+            int notificationId;
+
             // If result > 0, delete success
             if (result > 0) {
                 new CuteDialog.withAnimation(context)
@@ -123,6 +139,10 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                 doneItemsList.remove(todoDTO);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, doneItemsList.size());
+
+                notificationTitle = "Delete success";
+                notificationText = "Deleted todo with ID: " + todoDTO.getId();
+                notificationId = 4;  // Choose appropriate ID
             } else {
                 new CuteDialog.withAnimation(context)
                         .setAnimation(R.raw.error)
@@ -135,9 +155,28 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                         .hideNegativeButton(true)
                         .hideCloseIcon(true)
                         .show();
+
+                notificationTitle = "Delete fail";
+                notificationText = "Failed to delete todo with ID: " + todoDTO.getId();
+                notificationId = 5;  // Choose appropriate ID
             }
+            Intent openAppIntent = new Intent(context, MainActivity.class); // Change MainActivity to your desired activity
+            openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-
+            builderNotif = new NotificationCompat.Builder(context, CreateNotification.CHANNEL_ID)
+                    .setSmallIcon(R.drawable.minh)
+                    .setContentIntent(pendingIntent)
+                    .setContentTitle(notificationTitle)
+                    .setContentText(notificationText)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+            if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                //yêu cầu quyền
+                ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
+                return;
+            }
+            notificationManager.notify(notificationId, builderNotif.build());
         });
 
         // Set event for swipe layout
@@ -200,6 +239,13 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                     todoDTO.setEndDate(date);
                     TodoDAO todoDAO = new TodoDAO(context);
                     int status = todoDAO.updateTodo(todoDTO);
+
+                    // Build and show the notification
+                    NotificationCompat.Builder builderNotif;
+                    String notificationTitle;
+                    String notificationText;
+                    int notificationId = (int) System.currentTimeMillis();
+
                     if (status > 0) {
                         //replace fragment to show done list
                         MainActivity mainActivity = (MainActivity) context;
@@ -217,12 +263,32 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                                 .show();
                         notifyItemRangeChanged(position, doneItemsList.size());
                         alertDialog.dismiss();
+
+                        notificationTitle = "Update success";
+                        notificationText = "Updated todo with ID: " + todoDTO.getId();
+                    } else {
+                        notificationTitle = "Update fail";
+                        notificationText = "Failed to update todo with ID: " + todoDTO.getId();
+
                     }
+                    Intent openAppIntent = new Intent(context, MainActivity.class); // Change MainActivity to your desired activity
+                    openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+
+                    builderNotif = new NotificationCompat.Builder(context, CreateNotification.CHANNEL_ID)
+                            .setSmallIcon(R.drawable.minh)
+                            .setContentTitle(notificationTitle)
+                            .setContentText(notificationText)
+                            .setContentIntent(pendingIntent)
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+                    notificationManager.notify(notificationId, builderNotif.build());
                 }
             });
             alertDialog.show();
         });
-
         //Show content when long click
         holder.constraintTodo.setOnLongClickListener(v -> {
             // Create alert dialog

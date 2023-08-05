@@ -2,6 +2,9 @@ package com.nqmgaming.assignment_minhnqph31902.Fragment;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -15,13 +18,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.nqmgaming.assignment_minhnqph31902.DAO.TodoDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.TodoDTO;
+import com.nqmgaming.assignment_minhnqph31902.Permission.CloseNotificationReceiver;
+import com.nqmgaming.assignment_minhnqph31902.Permission.CreateNotification;
 import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
+import com.nqmgaming.assignment_minhnqph31902.UI.MainActivity;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -152,6 +161,28 @@ public class CalendarFragment extends Fragment {
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
                 alertDialog.dismiss();
+                Intent openAppIntent = new Intent(requireContext(), MainActivity.class); // Change MainActivity to your desired activity
+                openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                PendingIntent pendingIntent = PendingIntent.getActivity(requireContext(), 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                // Create an intent to close the notification
+                Intent closeNotificationIntent = new Intent(requireContext(), CloseNotificationReceiver.class); // Create a BroadcastReceiver to handle the action
+                PendingIntent closeNotificationPendingIntent = PendingIntent.getBroadcast(requireContext(), 0, closeNotificationIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                // Build and show the notification
+                NotificationCompat.Builder builder1 = new NotificationCompat.Builder(getContext(), CreateNotification.CHANNEL_ID)
+                        .setSmallIcon(R.drawable.minh)
+                        .setContentTitle("Todo App")
+                        .setContentIntent(pendingIntent)
+                        .addAction(R.drawable.close, "Close", closeNotificationPendingIntent)
+                        .setContentText("You have a new todo")
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getContext());
+                if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    //yêu cầu quyền
+                    ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
+                    return;
+                }
+                int notificationId = todoDTO.getId();
+                notificationManagerCompat.notify(notificationId, builder1.build());
             } else {
                 new CuteDialog.withAnimation(getContext())
                         .setAnimation(R.raw.error)

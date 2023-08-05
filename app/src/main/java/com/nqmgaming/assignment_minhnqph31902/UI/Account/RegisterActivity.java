@@ -216,6 +216,8 @@ public class RegisterActivity extends AppCompatActivity {
                 new CuteDialog.withAnimation(RegisterActivity.this)
                         .setAnimation(R.raw.done)
                         .setTitle("Success!")
+                        .hideCloseIcon(true)
+                        .setPositiveButtonColor(R.color.active)
                         .setDescription("Login successfully!")
                         .setPositiveButtonText("Ok", v1 -> {
 

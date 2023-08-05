@@ -1,7 +1,11 @@
 package com.nqmgaming.assignment_minhnqph31902.Adapter;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +21,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apachat.swipereveallayout.core.SwipeLayout;
@@ -24,6 +31,7 @@ import com.apachat.swipereveallayout.core.ViewBinder;
 import com.nqmgaming.assignment_minhnqph31902.DAO.TodoDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.TodoDTO;
 import com.nqmgaming.assignment_minhnqph31902.Fragment.SearchFragment;
+import com.nqmgaming.assignment_minhnqph31902.Permission.CreateNotification;
 import com.nqmgaming.assignment_minhnqph31902.R;
 import com.nqmgaming.assignment_minhnqph31902.UI.MainActivity;
 
@@ -92,6 +100,26 @@ public class SearchTodoAdapter extends RecyclerView.Adapter<SearchTodoAdapter.Vi
                         .hideNegativeButton(true)
                         .hideCloseIcon(true)
                         .show();
+                //Intent
+                Intent intent = new Intent(context, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+                //notification
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CreateNotification.CHANNEL_ID)
+                        .setSmallIcon(R.drawable.minh)
+                        .setContentTitle("Delete success")
+                        .setContentIntent(pendingIntent)
+                        .setContentText("Deleted todo with ID: " + todoDTO.getId())
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+                if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    //yêu cầu quyền
+                    ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
+                    return;
+                }
+                notificationManager.notify(0, builder.build());
             } else {
                 new CuteDialog.withAnimation(context)
                         .setAnimation(R.raw.error)
@@ -104,6 +132,18 @@ public class SearchTodoAdapter extends RecyclerView.Adapter<SearchTodoAdapter.Vi
                         .hideNegativeButton(true)
                         .hideCloseIcon(true)
                         .show();
+                Intent openAppIntent = new Intent(context, MainActivity.class); // Change MainActivity to your desired activity
+                openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CreateNotification.CHANNEL_ID)
+                        .setSmallIcon(R.drawable.minh)
+                        .setContentTitle("Delete fail")
+                        .setContentIntent(pendingIntent)
+                        .setContentText("Failed to delete todo with ID: " + todoDTO.getId())
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+                notificationManager.notify(1, builder.build());
             }
         });
         holder.ibEdit.setOnClickListener(v -> {
@@ -166,6 +206,12 @@ public class SearchTodoAdapter extends RecyclerView.Adapter<SearchTodoAdapter.Vi
                     TodoDAO todoDAO = new TodoDAO(context);
                     int status = todoDAO.updateTodo(todoDTO);
 
+                    // Build and show the notification
+                    NotificationCompat.Builder builderNotif;
+                    String notificationTitle;
+                    String notificationText;
+                    int notificationId;
+
                     //check status
                     if (status > 0) {
                         //replace fragment to show done list
@@ -177,13 +223,16 @@ public class SearchTodoAdapter extends RecyclerView.Adapter<SearchTodoAdapter.Vi
                                 .setTitleTextColor(R.color.black)
                                 .setPositiveButtonColor(R.color.black)
                                 .setPositiveButtonText("OK", v16 -> {
-
                                 })
                                 .hideNegativeButton(true)
                                 .hideCloseIcon(true)
                                 .show();
                         notifyItemRangeChanged(position, todoDTOArrayList.size());
                         alertDialog.dismiss();
+
+                        notificationTitle = "Update success";
+                        notificationText = "Updated todo with ID: " + todoDTO.getId();
+                        notificationId = 2;  // Choose appropriate ID
                     } else {
                         new CuteDialog.withAnimation(context)
                                 .setAnimation(R.raw.error)
@@ -191,12 +240,29 @@ public class SearchTodoAdapter extends RecyclerView.Adapter<SearchTodoAdapter.Vi
                                 .setTitleTextColor(R.color.black)
                                 .setPositiveButtonColor(R.color.black)
                                 .setPositiveButtonText("OK", v15 -> {
-
                                 })
                                 .hideNegativeButton(true)
                                 .hideCloseIcon(true)
                                 .show();
+
+                        notificationTitle = "Update fail";
+                        notificationText = "Failed to update todo with ID: " + todoDTO.getId();
+                        notificationId = 3;  // Choose appropriate ID
                     }
+                    // Create an intent to open the desired activity when notification is clicked
+                    Intent openAppIntent = new Intent(context, MainActivity.class); // Change MainActivity to your desired activity
+                    openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+                    builderNotif = new NotificationCompat.Builder(context, CreateNotification.CHANNEL_ID)
+                            .setSmallIcon(R.drawable.minh)
+                            .setContentTitle(notificationTitle)
+                            .setContentText(notificationText)
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                            .setContentIntent(pendingIntent);
+
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+                    notificationManager.notify(notificationId, builderNotif.build());
                 }
             });
             alertDialog.show();
@@ -282,7 +348,7 @@ public class SearchTodoAdapter extends RecyclerView.Adapter<SearchTodoAdapter.Vi
         holder.constraintSearch.setBackgroundColor(context.getResources().getColor(R.color.gray, null));
         holder.cvSearch.setCardBackgroundColor(context.getResources().getColor(R.color.gray, null));
         holder.tvNameSearch.setPaintFlags(holder.tvNameSearch.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
-        holder.cbSearch.setButtonTintList(context.getResources().getColorStateList(R.color.black, null));
+        holder.cbSearch.setButtonTintList(context.getResources().getColorStateList(R.color.active, null));
     }
 
     //set appearance for item when it is not done

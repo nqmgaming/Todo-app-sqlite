@@ -73,6 +73,16 @@ public class LoginActivity extends AppCompatActivity {
 
         cbRemember = findViewById(R.id.cbRememberMe);
 
+        cbRemember.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                // set background color to green
+                cbRemember.setButtonTintList(getResources().getColorStateList(R.color.active));
+            } else {
+                // set background color to red
+                cbRemember.setButtonTintList(getResources().getColorStateList(R.color.inactive));
+            }
+        });
+
         //set logo for app
         Glide.with(this)
                 .load(R.drawable.minh)
@@ -91,7 +101,6 @@ public class LoginActivity extends AppCompatActivity {
 
             edtPassword.setText(passwordAccount);
         }
-
 
 
         //set event click for txtRegister
@@ -174,6 +183,8 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     new CuteDialog.withAnimation(LoginActivity.this)
                             .setAnimation(R.raw.done)
+                            .hideCloseIcon(true)
+                            .setPositiveButtonColor(R.color.active)
                             .setTitle("Success!")
                             .setDescription("Login successfully!")
                             .setPositiveButtonText("Ok", v12 -> {

@@ -1,11 +1,18 @@
 package com.nqmgaming.assignment_minhnqph31902.Fragment;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,16 +23,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.nqmgaming.assignment_minhnqph31902.Permission.CloseNotificationReceiver;
+import com.nqmgaming.assignment_minhnqph31902.Permission.CreateNotification;
 import com.nqmgaming.assignment_minhnqph31902.Preferences.UserPreferences;
 import com.nqmgaming.assignment_minhnqph31902.R;
 import com.nqmgaming.assignment_minhnqph31902.DAO.TodoDAO;
 import com.nqmgaming.assignment_minhnqph31902.DTO.TodoDTO;
 import com.nqmgaming.assignment_minhnqph31902.Adapter.DoneTodoAdapter;
 import com.nqmgaming.assignment_minhnqph31902.Adapter.TodoAdapter;
+import com.nqmgaming.assignment_minhnqph31902.UI.MainActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,6 +57,8 @@ public class HomeFragment extends Fragment {
     FloatingActionButton fabDeleteAll;
     FloatingActionButton fabDoneAll;
     private boolean isSubMenuOpen = false;
+    LottieAnimationView lottieEmpty;
+    ScrollView scrollTodoList;
 
 
     @Override
@@ -62,6 +76,8 @@ public class HomeFragment extends Fragment {
             fabAddTodo = view.findViewById(R.id.fabAddTodo);
             fabDeleteAll = view.findViewById(R.id.fabDeleteAll);
             fabDoneAll = view.findViewById(R.id.doneAll);
+            lottieEmpty = view.findViewById(R.id.empty_anim);
+            scrollTodoList = view.findViewById(R.id.scrollTodoList);
 
             RecyclerView todoRecyclerView = view.findViewById(R.id.rcTodo);
             RecyclerView notTodoRecyclerView = view.findViewById(R.id.rcNotTodo);
@@ -75,9 +91,10 @@ public class HomeFragment extends Fragment {
 
                 todoDAO = new TodoDAO(getContext());
                 todoDTOArrayList = todoDAO.getAllTodoByUserId(idUser);
+                userPreferences = new UserPreferences(requireContext());
+                //chỉ tạo duy nhất 1 lần cho 1 người dùng
 
-                //create 4 data entries if todoDTOArrayList is empty
-                if (todoDTOArrayList.size() == 0) {
+                if (todoDTOArrayList.size() == 0 && !userPreferences.getFirstTime()) {
                     // Create 4 data entries
                     for (int i = 0; i < 3; i++) {
                         int id = idUser + 2004 + (int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + i;
@@ -101,6 +118,7 @@ public class HomeFragment extends Fragment {
                             Toast.makeText(getContext(), "Add todo fail", Toast.LENGTH_SHORT).show();
                         }
                     }
+                    userPreferences.setFirstTime(true);
                     todoDTOArrayList = todoDAO.getAllTodoByUserId(idUser);
                     doneItemsList.clear();
                     notDoneItemsList.clear();
@@ -112,13 +130,21 @@ public class HomeFragment extends Fragment {
                         }
                     }
                 } else {
-                    for (TodoDTO todo : todoDTOArrayList) {
-                        if (todo.getStatus() == 1) {
-                            doneItemsList.add(todo);
-                        } else {
-                            notDoneItemsList.add(todo);
+                    if (todoDTOArrayList.size() == 0) {
+                        scrollTodoList.setVisibility(View.GONE);
+                        lottieEmpty.setVisibility(View.VISIBLE);
+                    } else {
+                        scrollTodoList.setVisibility(View.VISIBLE);
+                        lottieEmpty.setVisibility(View.GONE);
+                        for (TodoDTO todo : todoDTOArrayList) {
+                            if (todo.getStatus() == 1) {
+                                doneItemsList.add(todo);
+                            } else {
+                                notDoneItemsList.add(todo);
+                            }
                         }
                     }
+
                 }
 
             } catch (Exception e) {
@@ -199,8 +225,8 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
-
                 imgSendAdd.setOnClickListener(v1 -> {
+
 
                     String title = edtTitle.getText().toString().trim();
                     String content = edtContent.getText().toString().trim();
@@ -258,9 +284,31 @@ public class HomeFragment extends Fragment {
                                 todoAdapter.notifyDataSetChanged();
                                 doneTodoAdapter.notifyDataSetChanged();
                                 todoAdapter.notifyDataSetChanged();
-
                                 // Dismiss dialog
                                 alertDialog.dismiss();
+                                // Create an intent to open the desired activity when notification is clicked
+                                Intent openAppIntent = new Intent(requireContext(), MainActivity.class); // Change MainActivity to your desired activity
+                                openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                PendingIntent pendingIntent = PendingIntent.getActivity(requireContext(), 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                                // Create an intent to close the notification
+                                Intent closeNotificationIntent = new Intent(requireContext(), CloseNotificationReceiver.class); // Create a BroadcastReceiver to handle the action
+                                PendingIntent closeNotificationPendingIntent = PendingIntent.getBroadcast(requireContext(), 0, closeNotificationIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                                // Build and show the notification
+                                NotificationCompat.Builder builder1 = new NotificationCompat.Builder(getContext(), CreateNotification.CHANNEL_ID)
+                                        .setSmallIcon(R.drawable.minh)
+                                        .setContentTitle("Todo App")
+                                        .setContentIntent(pendingIntent)
+                                        .addAction(R.drawable.close, "Close", closeNotificationPendingIntent)
+                                        .setContentText("You have a new todo")
+                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                                NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getContext());
+                                if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                                    //yêu cầu quyền
+                                    ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
+                                    return;
+                                }
+                                int notificationId = todoDTO.getId();
+                                notificationManagerCompat.notify(notificationId, builder1.build());
 
                             } else {
                                 new CuteDialog.withAnimation(getContext())
@@ -277,7 +325,7 @@ public class HomeFragment extends Fragment {
                             }
 
                         } catch (Exception e) {
-                            Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
                         }
 
                     }
@@ -408,7 +456,9 @@ public class HomeFragment extends Fragment {
                     .show();
         });
 
+
     }
+
 
     private void toggleSubMenu() {
         if (isSubMenuOpen) {

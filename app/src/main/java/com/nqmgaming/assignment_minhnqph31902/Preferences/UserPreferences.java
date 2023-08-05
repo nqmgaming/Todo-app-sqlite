@@ -59,4 +59,20 @@ public class UserPreferences {
         return sharedPreferences.getInt("id_user", 0);
 
     }
+
+    //ban đầu khi mới tạo tài khoản người dùng sẽ được tạo sẵn 3 item todo ngẫu nhiên nhưng khi đăng nhập lại thì sẽ không được tạo lại nữa
+    public void setFirstTime(boolean state) {
+
+        sharedPreferences.edit()
+                .putBoolean("first_time", state)
+                .apply();
+
+    }
+
+    //get first time
+    public boolean getFirstTime() {
+
+        return sharedPreferences.getBoolean("first_time", true);
+
+    }
 }

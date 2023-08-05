@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/flower"
             android:layout_width="60dp"
@@ -47,7 +48,18 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp" />
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/empty_anim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvDescTodoList"
+            android:visibility="gone"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/isempty" />
+
         <ScrollView
+            android:id="@+id/scrollTodoList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvDescTodoList"
@@ -61,17 +73,40 @@
                 android:layout_centerHorizontal="true"
                 android:orientation="vertical">
 
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/bk_todo"
+                    app:cardCornerRadius="10dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/not_done"
-                    android:drawablePadding="10dp"
-                    android:padding="10dp"
-                    android:text="Todo"
-                    android:textColor="#000000"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bk_todo"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingVertical="20dp">
+
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="20dp"
+                            android:src="@drawable/not_done" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Todo"
+                            android:textColor="@color/active"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -80,50 +115,45 @@
                     android:layout_height="wrap_content" />
 
 
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/nothingTodo"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    app:lottie_autoPlay="true"
-                    app:lottie_loop="true"
-                    app:lottie_rawRes="@raw/nothing" />
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    app:cardCornerRadius="10dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="End Todo List" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bk_todo"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingVertical="20dp">
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/done"
-                    android:drawablePadding="10dp"
-                    android:padding="10dp"
-                    android:text="Done"
-                    android:textColor="#000000"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="20dp"
+                            android:src="@drawable/done" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Done"
+                            android:textColor="@color/inactive"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcNotTodo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/nothing"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    app:lottie_autoPlay="true"
-                    app:lottie_loop="true"
-                    app:lottie_rawRes="@raw/nothing" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="End Done List" />
 
             </LinearLayout>
         </ScrollView>
@@ -137,7 +167,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:src="@drawable/add"
-            app:backgroundTint="#864945" />
+            app:backgroundTint="#6FBFC4" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabDeleteAll"
